@@ -3,3483 +3,4471 @@
 <head>
 <meta charset="UTF-8">
 
-<meta name="viewport"
-content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"
+>
 
 <title>RishantCraft</title>
 
-<link rel="icon" href="logo.png">
+<link rel="icon" type="image/png" href="logo.png">
 
 <style>
 *{
-    box-sizing:border-box;
-    -webkit-tap-highlight-color:transparent;
+  box-sizing:border-box;
+  -webkit-tap-highlight-color:transparent;
 }
 
 html,body{
-    margin:0;
-    width:100%;
-    height:100%;
-    overflow:hidden;
-    background:#87ceeb;
-    font-family:Arial,Helvetica,sans-serif;
+  width:100%;
+  height:100%;
+  margin:0;
+  overflow:hidden;
+  background:#000;
+  font-family:Arial,Helvetica,sans-serif;
+  touch-action:none;
+}
+
+body{
+  position:fixed;
+  inset:0;
 }
 
 canvas{
-    display:block;
-    position:fixed;
-    inset:0;
+  position:fixed;
+  inset:0;
+  width:100%;
+  height:100%;
+  display:block;
+  touch-action:none;
 }
 
-#menu,
-#pause{
-    position:fixed;
-    inset:0;
-    z-index:100;
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    justify-content:center;
-    color:white;
-    text-align:center;
+/* ================= START SCREEN ================= */
 
-    background:
-        linear-gradient(
-            rgba(0,0,0,.25),
-            rgba(0,0,0,.72)
-        ),
-        #477ca0;
+#home{
+  position:fixed;
+  inset:0;
+  z-index:50;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  background:
+    radial-gradient(circle at 50% 35%,rgba(70,180,255,.25),transparent 35%),
+    linear-gradient(#10283a,#071018);
 }
 
-#pause{
-    display:none;
+.homeBox{
+  width:min(92vw,480px);
+  padding:28px;
+  border-radius:24px;
+  text-align:center;
+  background:rgba(8,15,22,.88);
+  border:1px solid rgba(255,255,255,.15);
+  box-shadow:0 20px 80px rgba(0,0,0,.65);
 }
 
-.logo{
-    width:125px;
-    height:125px;
-    object-fit:contain;
-    border-radius:24px;
-    filter:drop-shadow(0 8px 20px #000);
-    margin-bottom:15px;
+.homeLogo{
+  width:110px;
+  height:110px;
+  object-fit:cover;
+  border-radius:22px;
+  margin-bottom:15px;
+  box-shadow:0 10px 35px rgba(0,0,0,.5);
 }
 
-.title{
-    font-size:clamp(38px,8vw,72px);
-    font-weight:900;
-    letter-spacing:3px;
-    text-shadow:0 5px 15px #000;
+.homeTitle{
+  color:white;
+  font-size:34px;
+  font-weight:900;
+  margin:0 0 8px;
 }
 
-.subtitle{
-    margin-top:5px;
-    margin-bottom:25px;
-    opacity:.9;
+.homeSub{
+  color:#aebdca;
+  font-size:14px;
+  margin-bottom:24px;
 }
 
-.btn{
-    width:min(330px,82vw);
-    margin:6px;
-    padding:15px 20px;
-
-    border:2px solid rgba(255,255,255,.6);
-    border-radius:12px;
-
-    color:white;
-    background:rgba(20,20,20,.75);
-
-    font-size:18px;
-    font-weight:bold;
-    cursor:pointer;
+.menuBtn{
+  width:100%;
+  border:0;
+  border-radius:14px;
+  padding:15px;
+  margin-top:10px;
+  color:white;
+  background:linear-gradient(135deg,#20a4ff,#1769ff);
+  font-size:17px;
+  font-weight:800;
+  cursor:pointer;
 }
 
-.btn:hover{
-    background:rgba(255,255,255,.18);
+.menuBtn.secondary{
+  background:#202b35;
 }
 
-#loading{
-    position:fixed;
-    inset:0;
-    z-index:200;
-    display:none;
-    align-items:center;
-    justify-content:center;
-    flex-direction:column;
-    color:white;
-    background:#111;
+.menuBtn:active{
+  transform:scale(.97);
 }
 
-.loader{
-    width:55px;
-    height:55px;
-    border-radius:50%;
-    border:5px solid #444;
-    border-top-color:white;
-    animation:spin 1s linear infinite;
+#audioStatus{
+  margin-top:12px;
+  min-height:18px;
+  color:#8fd5ff;
+  font-size:12px;
 }
 
-@keyframes spin{
-    to{
-        transform:rotate(360deg);
-    }
+/* ================= ROTATE ================= */
+
+#rotateScreen{
+  position:fixed;
+  inset:0;
+  z-index:100;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  background:#071018;
+  color:white;
+  padding:30px;
 }
+
+.rotateBox{
+  max-width:360px;
+}
+
+.phoneIcon{
+  font-size:65px;
+  animation:rotatePhone 1.8s infinite ease-in-out;
+}
+
+@keyframes rotatePhone{
+  0%,100%{transform:rotate(0deg)}
+  50%{transform:rotate(90deg)}
+}
+
+.rotateTitle{
+  font-size:25px;
+  font-weight:900;
+  margin-top:15px;
+}
+
+.rotateText{
+  color:#9fb0bd;
+  line-height:1.5;
+  margin-top:10px;
+}
+
+/* ================= HUD ================= */
 
 #hud{
-    position:fixed;
-    inset:0;
-    z-index:20;
-    pointer-events:none;
-    display:none;
-}
-
-#info{
-    position:absolute;
-    top:12px;
-    left:12px;
-    color:white;
-    font-size:13px;
-    line-height:1.5;
-    text-shadow:0 2px 5px #000;
-}
-
-#pauseBtn{
-    pointer-events:auto;
-    position:absolute;
-    right:12px;
-    top:12px;
-    width:45px;
-    height:45px;
-    border-radius:10px;
-    border:1px solid white;
-    color:white;
-    background:rgba(0,0,0,.5);
-    font-size:20px;
+  position:fixed;
+  inset:0;
+  z-index:10;
+  pointer-events:none;
+  display:none;
 }
 
 #crosshair{
-    position:absolute;
-    left:50%;
-    top:50%;
-    transform:translate(-50%,-50%);
-    width:18px;
-    height:18px;
+  position:absolute;
+  left:50%;
+  top:50%;
+  width:18px;
+  height:18px;
+  transform:translate(-50%,-50%);
 }
 
 #crosshair:before,
 #crosshair:after{
-    content:"";
-    position:absolute;
-    background:white;
-    box-shadow:0 1px 4px #000;
+  content:"";
+  position:absolute;
+  background:white;
+  box-shadow:0 0 4px black;
 }
 
 #crosshair:before{
-    width:18px;
-    height:2px;
-    left:0;
-    top:8px;
+  width:14px;
+  height:2px;
+  left:2px;
+  top:8px;
 }
 
 #crosshair:after{
-    width:2px;
-    height:18px;
-    left:8px;
-    top:0;
+  width:2px;
+  height:14px;
+  left:8px;
+  top:2px;
 }
 
-#toast{
-    position:absolute;
-    left:50%;
-    top:16%;
-    transform:translateX(-50%);
-    padding:10px 16px;
-    color:white;
-    background:rgba(0,0,0,.7);
-    border-radius:8px;
-    opacity:0;
-    transition:.2s;
+#topInfo{
+  position:absolute;
+  top:12px;
+  left:12px;
+  color:white;
+  background:rgba(0,0,0,.42);
+  padding:7px 10px;
+  border-radius:9px;
+  font-size:12px;
 }
 
-#toast.show{
-    opacity:1;
+#targetInfo{
+  position:absolute;
+  top:48px;
+  left:12px;
+  color:#dcefff;
+  background:rgba(0,0,0,.3);
+  padding:5px 8px;
+  border-radius:7px;
+  font-size:11px;
 }
+
+/* ================= HOTBAR ================= */
 
 #hotbar{
-    position:absolute;
-    left:50%;
-    bottom:15px;
-    transform:translateX(-50%);
-    display:flex;
-    gap:5px;
-    padding:6px;
-    border-radius:10px;
-    background:rgba(0,0,0,.55);
+  position:absolute;
+  left:50%;
+  bottom:18px;
+  transform:translateX(-50%);
+  display:flex;
+  gap:4px;
+  padding:6px;
+  background:rgba(0,0,0,.48);
+  border:1px solid rgba(255,255,255,.15);
+  border-radius:10px;
 }
 
 .slot{
-    width:52px;
-    height:52px;
-    position:relative;
-    overflow:hidden;
-    border:2px solid #666;
-    border-radius:7px;
-    background:#222;
+  position:relative;
+  width:48px;
+  height:48px;
+  border:2px solid rgba(255,255,255,.25);
+  border-radius:7px;
+  background:rgba(35,35,35,.85);
+  overflow:hidden;
 }
 
 .slot.selected{
-    border-color:white;
-    box-shadow:0 0 12px white;
+  border:3px solid #fff;
+  box-shadow:0 0 12px rgba(255,255,255,.5);
 }
 
 .slot img{
-    width:100%;
-    height:100%;
-    object-fit:cover;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  image-rendering:auto;
 }
 
-.slot span{
-    position:absolute;
-    top:2px;
-    left:4px;
-    color:white;
-    font-size:11px;
-    text-shadow:0 2px 3px #000;
+.slotNumber{
+  position:absolute;
+  left:3px;
+  top:2px;
+  font-size:10px;
+  color:white;
+  text-shadow:0 1px 2px black;
 }
 
-#mobile{
-    display:none;
-    position:absolute;
-    inset:0;
+/* ================= PAUSE ================= */
+
+#pause{
+  position:fixed;
+  inset:0;
+  z-index:60;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  background:rgba(0,0,0,.62);
+}
+
+.pauseBox{
+  width:min(90vw,380px);
+  background:#101820;
+  color:white;
+  padding:25px;
+  border-radius:20px;
+  text-align:center;
+}
+
+.pauseBox h2{
+  margin-top:0;
+}
+
+/* ================= MOBILE CONTROLS ================= */
+
+#mobileControls{
+  display:none;
+  position:fixed;
+  inset:0;
+  z-index:20;
+  pointer-events:none;
 }
 
 #joystick{
-    position:absolute;
-    left:22px;
-    bottom:90px;
-    width:125px;
-    height:125px;
-    border:2px solid rgba(255,255,255,.35);
-    border-radius:50%;
-    background:rgba(0,0,0,.2);
-    pointer-events:auto;
+  position:absolute;
+  left:24px;
+  bottom:25px;
+  width:125px;
+  height:125px;
+  border-radius:50%;
+  background:rgba(255,255,255,.10);
+  border:2px solid rgba(255,255,255,.2);
+  pointer-events:auto;
 }
 
-#stick{
-    position:absolute;
-    width:55px;
-    height:55px;
-    left:33px;
-    top:33px;
-    border-radius:50%;
-    background:rgba(255,255,255,.4);
+#joystickKnob{
+  position:absolute;
+  left:50%;
+  top:50%;
+  width:54px;
+  height:54px;
+  transform:translate(-50%,-50%);
+  border-radius:50%;
+  background:rgba(255,255,255,.35);
+  border:2px solid rgba(255,255,255,.5);
 }
 
-.mbtn{
-    position:absolute;
-    width:60px;
-    height:60px;
-    border-radius:50%;
-    border:2px solid rgba(255,255,255,.6);
-    color:white;
-    background:rgba(0,0,0,.45);
-    font-weight:bold;
-    pointer-events:auto;
+.mobileButton{
+  position:absolute;
+  width:65px;
+  height:65px;
+  border-radius:50%;
+  border:1px solid rgba(255,255,255,.3);
+  background:rgba(0,0,0,.45);
+  color:white;
+  font-size:12px;
+  font-weight:bold;
+  pointer-events:auto;
 }
 
-#jump{
-    right:25px;
-    bottom:125px;
+#jumpBtn{
+  right:25px;
+  bottom:120px;
 }
 
-#break{
-    right:100px;
-    bottom:60px;
+#breakBtn{
+  right:105px;
+  bottom:45px;
 }
 
-#place{
-    right:25px;
-    bottom:55px;
+#placeBtn{
+  right:25px;
+  bottom:45px;
 }
 
-#mobilePause{
-    right:25px;
-    top:70px;
+#pauseBtn{
+  right:18px;
+  top:18px;
+  width:46px;
+  height:46px;
 }
 
-#look{
-    position:absolute;
-    right:0;
-    top:0;
-    width:60%;
-    height:70%;
-    pointer-events:auto;
+/* ================= LOADING ================= */
+
+#loading{
+  position:fixed;
+  inset:0;
+  z-index:90;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:#071018;
+  color:white;
 }
 
-@media(max-width:800px){
+.loadingBox{
+  text-align:center;
+}
 
-    #mobile{
-        display:block;
-    }
+.loader{
+  width:50px;
+  height:50px;
+  border-radius:50%;
+  border:4px solid rgba(255,255,255,.15);
+  border-top-color:#38bdf8;
+  animation:spin 1s linear infinite;
+  margin:auto;
+}
 
-    #hotbar{
-        bottom:5px;
-        max-width:96vw;
-    }
+@keyframes spin{
+  to{transform:rotate(360deg)}
+}
 
-    .slot{
-        width:40px;
-        height:40px;
-    }
+/* ================= PORTRAIT MOBILE ================= */
 
-    #info{
-        font-size:10px;
-    }
+@media (orientation:portrait) and (max-width:900px){
+  #rotateScreen{
+    display:flex;
+  }
+
+  #home{
+    display:none !important;
+  }
+
+  #hud,
+  #mobileControls{
+    display:none !important;
+  }
+}
+
+/* landscape mobile */
+@media (orientation:landscape) and (max-width:900px){
+  #mobileControls{
+    display:block;
+  }
+
+  #hotbar{
+    bottom:8px;
+    transform:translateX(-50%) scale(.82);
+    transform-origin:bottom center;
+  }
+
+  #topInfo{
+    top:6px;
+    left:6px;
+  }
+
+  #targetInfo{
+    top:38px;
+    left:6px;
+  }
+}
+
+/* desktop */
+@media (min-width:901px){
+  #hotbar{
+    bottom:14px;
+  }
 }
 </style>
 </head>
 
 <body>
 
+<!-- ================= ROTATE SCREEN ================= -->
+
+<div id="rotateScreen">
+  <div class="rotateBox">
+    <div class="phoneIcon">📱</div>
+    <div class="rotateTitle">Rotate Your Phone</div>
+    <div class="rotateText">
+      RishantCraft is designed for landscape mode.<br>
+      Turn your phone horizontally to play.
+    </div>
+  </div>
+</div>
+
+<!-- ================= LOADING ================= -->
+
 <div id="loading">
+  <div class="loadingBox">
     <div class="loader"></div>
-    <div style="margin-top:15px">
-        Creating RishantCraft world...
+    <div style="margin-top:15px;font-weight:bold">
+      Loading RishantCraft...
     </div>
+    <div id="loadingText" style="margin-top:8px;color:#8da2b0;font-size:12px">
+      Loading textures
+    </div>
+  </div>
 </div>
 
-<div id="menu">
+<!-- ================= HOME ================= -->
 
-    <img src="logo.png" class="logo">
+<div id="home">
+  <div class="homeBox">
 
-    <div class="title">
-        RishantCraft
+    <img
+      class="homeLogo"
+      src="logo.png"
+      onerror="this.style.display='none'"
+    >
+
+    <h1 class="homeTitle">RishantCraft</h1>
+
+    <div class="homeSub">
+      Infinite-style voxel survival world
     </div>
 
-    <div class="subtitle">
-        Explore • Build • Discover
-    </div>
-
-    <button class="btn" id="play">
-        ▶ PLAY
+    <button id="playBtn" class="menuBtn">
+      ▶ PLAY WORLD
     </button>
 
-    <button class="btn" id="newWorld">
-        🌎 NEW WORLD
+    <button id="newWorldBtn" class="menuBtn secondary">
+      🌎 NEW WORLD
     </button>
 
-    <div style="font-size:12px;opacity:.75;margin-top:15px">
-        W A S D • Mouse • Space • Shift
+    <div id="audioStatus">
+      🔊 Audio ready
     </div>
 
+  </div>
 </div>
 
-<div id="pause">
-
-    <img src="logo.png" class="logo">
-
-    <div class="title" style="font-size:42px">
-        PAUSED
-    </div>
-
-    <button class="btn" id="resume">
-        ▶ Resume
-    </button>
-
-    <button class="btn" id="save">
-        💾 Save World
-    </button>
-
-    <button class="btn" id="home">
-        ⌂ Main Menu
-    </button>
-
-</div>
+<!-- ================= HUD ================= -->
 
 <div id="hud">
 
-    <div id="info">
-        <b>RishantCraft</b><br>
-        <span id="xyz">XYZ: 0 0 0</span><br>
-        <span id="fps">FPS: --</span>
-    </div>
+  <div id="crosshair"></div>
 
-    <button id="pauseBtn">
-        Ⅱ
+  <div id="topInfo">
+    RishantCraft
+  </div>
+
+  <div id="targetInfo">
+    Block: -
+  </div>
+
+  <div id="hotbar"></div>
+
+</div>
+
+<!-- ================= PAUSE ================= -->
+
+<div id="pause">
+  <div class="pauseBox">
+    <h2>Game Paused</h2>
+
+    <button id="resumeBtn" class="menuBtn">
+      ▶ Resume
     </button>
 
-    <div id="crosshair"></div>
+    <button id="saveBtn" class="menuBtn secondary">
+      💾 Save World
+    </button>
 
-    <div id="toast"></div>
+    <button id="homeBtn" class="menuBtn secondary">
+      🏠 Main Menu
+    </button>
+  </div>
+</div>
 
-    <div id="hotbar"></div>
+<!-- ================= MOBILE CONTROLS ================= -->
 
-    <div id="mobile">
+<div id="mobileControls">
 
-        <div id="joystick">
-            <div id="stick"></div>
-        </div>
+  <div id="joystick">
+    <div id="joystickKnob"></div>
+  </div>
 
-        <div id="look"></div>
+  <button id="jumpBtn" class="mobileButton">
+    JUMP
+  </button>
 
-        <button class="mbtn" id="jump">
-            ↑
-        </button>
+  <button id="breakBtn" class="mobileButton">
+    BREAK
+  </button>
 
-        <button class="mbtn" id="break">
-            ✕
-        </button>
+  <button id="placeBtn" class="mobileButton">
+    PLACE
+  </button>
 
-        <button class="mbtn" id="place">
-            +
-        </button>
-
-        <button class="mbtn" id="mobilePause">
-            Ⅱ
-        </button>
-
-    </div>
+  <button id="pauseBtn" class="mobileButton">
+    II
+  </button>
 
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/three@0.160.0/examples/js/loaders/FBXLoader.js"></script>
 
 <script>
+/* ============================================================
+   RISHANTCRAFT
+   ROOT ASSET STRUCTURE
+   ============================================================ */
 
-/* =========================================================
-   RISHANTCRAFT FIXED VERSION
-   ALL FILES ARE IN SAME GITHUB ROOT FOLDER
-   ========================================================= */
+(() => {
 
+"use strict";
 
-/* =========================================================
-   ASSET PATHS
-   ========================================================= */
+/* ============================================================
+   ASSETS
+   ============================================================ */
 
 const ASSETS = {
+  grass: "tileable_grass_00.png",
+  dirt: "dirt1.png",
+  stone: "handpaintedwall2.png",
+  sand: "Sand2_S.jpg",
+  wood: "wood1.jpg",
+  leaves: "LongLeaves_S.jpg",
+  glass: "Transparent.png",
+  brick: "bricksx64.png",
+  door: "door.png",
+  water: "tex_Water.jpg",
+  logo: "logo.png",
 
-    grass:
-        "tileable_grass_00.png",
-
-    dirt:
-        "dirt1.png",
-
-    stone:
-        "handpaintedwall2.png",
-
-    sand:
-        "Sand2_S.jpg",
-
-    wood:
-        "wood1.jpg",
-
-    leaves:
-        "LongLeaves_S.jpg",
-
-    glass:
-        "Transparent.png",
-
-    brick:
-        "bricksx64.png",
-
-    door:
-        "door.png",
-
-    water:
-        "tex_Water.jpg",
-
-    villagerDiffuse:
-        "ManTextured_diffuse.png",
-
-    villagerNormal:
-        "ManTextured_normal.png",
-
-    villagerMetal:
-        "ManTextured_Metallic.png",
-
-    villagerModel:
-        "EmoPreben Man Model 1.fbx",
-
-    walkSound:
-        "walk.mp3",
-
-    breakSound:
-        "break.mp3",
-
-    music:
-        "back.mp3"
+  walkSound: "walk.mp3",
+  breakSound: "break.mp3",
+  backSound: "back.mp3"
 };
 
+/* ============================================================
+   DOM
+   ============================================================ */
 
-/* =========================================================
-   RENDERER
-   ========================================================= */
+const home = document.getElementById("home");
+const loading = document.getElementById("loading");
+const loadingText = document.getElementById("loadingText");
+const playBtn = document.getElementById("playBtn");
+const newWorldBtn = document.getElementById("newWorldBtn");
+const audioStatus = document.getElementById("audioStatus");
 
-const canvas=
-    document.createElement("canvas");
+const hud = document.getElementById("hud");
+const targetInfo = document.getElementById("targetInfo");
 
-document.body.insertBefore(
-    canvas,
-    document.body.firstChild
+const pause = document.getElementById("pause");
+const resumeBtn = document.getElementById("resumeBtn");
+const saveBtn = document.getElementById("saveBtn");
+const homeBtn = document.getElementById("homeBtn");
+
+const hotbar = document.getElementById("hotbar");
+
+const mobileControls = document.getElementById("mobileControls");
+const joystick = document.getElementById("joystick");
+const joystickKnob = document.getElementById("joystickKnob");
+const jumpBtn = document.getElementById("jumpBtn");
+const breakBtn = document.getElementById("breakBtn");
+const placeBtn = document.getElementById("placeBtn");
+const pauseBtn = document.getElementById("pauseBtn");
+
+/* ============================================================
+   AUDIO
+   ============================================================ */
+
+const homeMusic = new Audio(ASSETS.backSound);
+const walkSound = new Audio(ASSETS.walkSound);
+const breakSound = new Audio(ASSETS.breakSound);
+
+homeMusic.loop = true;
+homeMusic.volume = 0.30;
+
+walkSound.loop = true;
+walkSound.volume = 0.50;
+
+breakSound.volume = 0.75;
+
+homeMusic.preload = "auto";
+walkSound.preload = "auto";
+breakSound.preload = "auto";
+
+homeMusic.addEventListener("error", () => {
+  audioStatus.textContent = "⚠ back.mp3 not loaded";
+});
+
+walkSound.addEventListener("error", () => {
+  audioStatus.textContent = "⚠ walk.mp3 not loaded";
+});
+
+breakSound.addEventListener("error", () => {
+  audioStatus.textContent = "⚠ break.mp3 not loaded";
+});
+
+function playHomeMusic(){
+
+  homeMusic.play().catch(() => {
+    audioStatus.textContent =
+      "🔊 Click PLAY once to enable audio";
+  });
+
+}
+
+function stopHomeMusic(){
+
+  homeMusic.pause();
+
+}
+
+function playWalkSound(){
+
+  if(walkSound.paused){
+    walkSound.play().catch(()=>{});
+  }
+
+}
+
+function stopWalkSound(){
+
+  if(!walkSound.paused){
+    walkSound.pause();
+    walkSound.currentTime = 0;
+  }
+
+}
+
+function playBreakSound(){
+
+  breakSound.currentTime = 0;
+
+  breakSound.play().catch(()=>{});
+
+}
+
+/* ============================================================
+   THREE
+   ============================================================ */
+
+let scene;
+let camera;
+let renderer;
+
+const clock = new THREE.Clock();
+
+const raycaster = new THREE.Raycaster();
+
+const pointer = new THREE.Vector2(0,0);
+
+const worldGroup = new THREE.Group();
+
+scene = new THREE.Scene();
+
+scene.background = new THREE.Color(0x78c8f2);
+
+scene.fog = new THREE.Fog(
+  0x78c8f2,
+  45,
+  190
 );
 
-const renderer=
-    new THREE.WebGLRenderer({
-        canvas:canvas,
-        antialias:false,
-        powerPreference:"high-performance"
-    });
-
-renderer.setPixelRatio(
-    Math.min(
-        window.devicePixelRatio,
-        1.35
-    )
+camera = new THREE.PerspectiveCamera(
+  75,
+  window.innerWidth / window.innerHeight,
+  0.05,
+  500
 );
+
+renderer = new THREE.WebGLRenderer({
+  antialias:false,
+  powerPreference:"high-performance"
+});
 
 renderer.setSize(
-    innerWidth,
-    innerHeight
+  window.innerWidth,
+  window.innerHeight
 );
 
-renderer.outputColorSpace=
-    THREE.SRGBColorSpace;
+renderer.setPixelRatio(
+  Math.min(window.devicePixelRatio || 1,1.5)
+);
 
+renderer.outputColorSpace = THREE.SRGBColorSpace;
 
-/* =========================================================
-   SCENE
-   ========================================================= */
+renderer.domElement.style.touchAction = "none";
 
-const scene=
-    new THREE.Scene();
+document.body.appendChild(renderer.domElement);
 
-scene.background=
-    new THREE.Color(0x7fc7ee);
+scene.add(worldGroup);
 
-scene.fog=
-    new THREE.Fog(
-        0x7fc7ee,
-        45,
-        150
-    );
+/* ============================================================
+   LIGHTING
+   ============================================================ */
 
+const hemi = new THREE.HemisphereLight(
+  0xbfe9ff,
+  0x5b4635,
+  1.65
+);
 
-/* =========================================================
-   CAMERA
-   ========================================================= */
+scene.add(hemi);
 
-const camera=
-    new THREE.PerspectiveCamera(
-        75,
-        innerWidth/innerHeight,
-        .05,
-        400
-    );
-
-camera.rotation.order=
-    "YXZ";
-
-
-/* =========================================================
-   LIGHT
-   ========================================================= */
-
-const ambient=
-    new THREE.HemisphereLight(
-        0xffffff,
-        0x665544,
-        1.5
-    );
-
-scene.add(ambient);
-
-const sun=
-    new THREE.DirectionalLight(
-        0xffffff,
-        2
-    );
+const sun = new THREE.DirectionalLight(
+  0xffffff,
+  2.1
+);
 
 sun.position.set(
-    50,
-    100,
-    40
+  80,
+  120,
+  40
 );
 
 scene.add(sun);
 
+/* ============================================================
+   TEXTURE LOADING
+   ============================================================ */
 
-/* =========================================================
-   TEXTURE LOADER
-   ========================================================= */
+const textureLoader = new THREE.TextureLoader();
 
-const loader=
-    new THREE.TextureLoader();
+const textures = {};
 
-const textures={};
+function fallbackTexture(color){
 
-function texture(path){
+  const canvas = document.createElement("canvas");
 
-    if(textures[path]){
-        return textures[path];
+  canvas.width = 32;
+  canvas.height = 32;
+
+  const ctx = canvas.getContext("2d");
+
+  ctx.fillStyle = color;
+  ctx.fillRect(0,0,32,32);
+
+  ctx.fillStyle = "rgba(255,255,255,.08)";
+
+  for(let y=0;y<32;y+=8){
+
+    for(let x=0;x<32;x+=8){
+
+      ctx.fillRect(x,y,4,4);
+
     }
 
-    const t=
-        loader.load(
-            path,
-            ()=>{
-                t.needsUpdate=true;
-            },
-            undefined,
-            ()=>{
-                console.warn(
-                    "Missing asset:",
-                    path
-                );
-            }
-        );
+  }
 
-    t.colorSpace=
-        THREE.SRGBColorSpace;
+  const tex = new THREE.CanvasTexture(canvas);
 
-    t.wrapS=
-        THREE.RepeatWrapping;
+  tex.colorSpace = THREE.SRGBColorSpace;
 
-    t.wrapT=
-        THREE.RepeatWrapping;
-
-    textures[path]=t;
-
-    return t;
+  return tex;
 }
 
+function prepareTexture(tex){
 
-/* =========================================================
-   BLOCK DATA
-   ========================================================= */
+  tex.colorSpace = THREE.SRGBColorSpace;
 
-const BLOCK_DATA={
+  tex.wrapS = THREE.RepeatWrapping;
+  tex.wrapT = THREE.RepeatWrapping;
 
-    grass:{
-        map:ASSETS.grass
-    },
+  tex.magFilter = THREE.LinearFilter;
+  tex.minFilter = THREE.LinearMipmapLinearFilter;
 
-    dirt:{
-        map:ASSETS.dirt
-    },
+  return tex;
+}
 
-    stone:{
-        map:ASSETS.stone
-    },
+function loadTexture(url,fallbackColor){
 
-    sand:{
-        map:ASSETS.sand
-    },
+  return new Promise(resolve => {
 
-    wood:{
-        map:ASSETS.wood
-    },
+    textureLoader.load(
+      url,
 
-    leaves:{
-        map:ASSETS.leaves,
-        transparent:true
-    },
+      texture => {
+        resolve(prepareTexture(texture));
+      },
 
-    glass:{
-        map:ASSETS.glass,
-        transparent:true
-    },
+      undefined,
 
-    brick:{
-        map:ASSETS.brick
-    },
+      () => {
+        console.warn("Texture missing:",url);
+        resolve(fallbackTexture(fallbackColor));
+      }
 
-    water:{
-        map:ASSETS.water,
-        transparent:true,
-        opacity:.65
-    }
+    );
+
+  });
+
+}
+
+/* ============================================================
+   BLOCK MATERIALS
+   ============================================================ */
+
+const materials = {};
+
+const blockColors = {
+  grass:"#62a84f",
+  dirt:"#8b5a36",
+  stone:"#777777",
+  sand:"#d9c27c",
+  wood:"#87572e",
+  leaves:"#3d8d42",
+  glass:"#bdefff",
+  brick:"#a34b3f",
+  water:"#399ddd"
 };
 
-const materials={};
+async function loadAllTextures(){
 
-function material(type){
+  loadingText.textContent = "Loading block textures...";
 
-    if(materials[type]){
-        return materials[type];
+  textures.grass =
+    await loadTexture(ASSETS.grass,blockColors.grass);
+
+  textures.dirt =
+    await loadTexture(ASSETS.dirt,blockColors.dirt);
+
+  textures.stone =
+    await loadTexture(ASSETS.stone,blockColors.stone);
+
+  textures.sand =
+    await loadTexture(ASSETS.sand,blockColors.sand);
+
+  textures.wood =
+    await loadTexture(ASSETS.wood,blockColors.wood);
+
+  textures.leaves =
+    await loadTexture(ASSETS.leaves,blockColors.leaves);
+
+  textures.glass =
+    await loadTexture(ASSETS.glass,blockColors.glass);
+
+  textures.brick =
+    await loadTexture(ASSETS.brick,blockColors.brick);
+
+  textures.water =
+    await loadTexture(ASSETS.water,blockColors.water);
+
+  textures.door =
+    await loadTexture(ASSETS.door,blockColors.wood);
+
+  const common = {
+    map:null
+  };
+
+  materials.grass =
+    new THREE.MeshLambertMaterial({
+      map:textures.grass
+    });
+
+  materials.dirt =
+    new THREE.MeshLambertMaterial({
+      map:textures.dirt
+    });
+
+  materials.stone =
+    new THREE.MeshLambertMaterial({
+      map:textures.stone
+    });
+
+  materials.sand =
+    new THREE.MeshLambertMaterial({
+      map:textures.sand
+    });
+
+  materials.wood =
+    new THREE.MeshLambertMaterial({
+      map:textures.wood
+    });
+
+  materials.leaves =
+    new THREE.MeshLambertMaterial({
+      map:textures.leaves,
+      transparent:true,
+      alphaTest:.05
+    });
+
+  materials.glass =
+    new THREE.MeshLambertMaterial({
+      map:textures.glass,
+      transparent:true,
+      opacity:.48,
+      depthWrite:false,
+      side:THREE.DoubleSide
+    });
+
+  materials.brick =
+    new THREE.MeshLambertMaterial({
+      map:textures.brick
+    });
+
+  materials.water =
+    new THREE.MeshLambertMaterial({
+      map:textures.water,
+      transparent:true,
+      opacity:.62,
+      depthWrite:false,
+      side:THREE.DoubleSide
+    });
+
+}
+
+/* ============================================================
+   BLOCK DATA
+   ============================================================ */
+
+const BLOCKS = [
+  "grass",
+  "dirt",
+  "stone",
+  "sand",
+  "wood",
+  "leaves",
+  "glass",
+  "brick",
+  "water"
+];
+
+const HOTBAR_BLOCKS = [
+  "grass",
+  "dirt",
+  "stone",
+  "sand",
+  "wood",
+  "leaves",
+  "glass",
+  "brick",
+  "door"
+];
+
+let selectedSlot = 0;
+
+const cubeGeometry =
+  new THREE.BoxGeometry(1,1,1);
+
+/* ============================================================
+   HOTBAR
+   ============================================================ */
+
+function createHotbar(){
+
+  hotbar.innerHTML = "";
+
+  HOTBAR_BLOCKS.forEach((type,index)=>{
+
+    const slot =
+      document.createElement("div");
+
+    slot.className = "slot";
+
+    if(index === selectedSlot){
+      slot.classList.add("selected");
     }
 
-    const data=
-        BLOCK_DATA[type];
+    const number =
+      document.createElement("div");
 
-    const mat=
-        new THREE.MeshLambertMaterial({
-            map:texture(data.map),
-            transparent:!!data.transparent,
-            opacity:data.opacity||1,
-            alphaTest:
-                data.transparent
-                ? .05
-                : 0,
-            side:
-                data.transparent
-                ? THREE.DoubleSide
-                : THREE.FrontSide
-        });
+    number.className = "slotNumber";
 
-    materials[type]=mat;
+    number.textContent =
+      index === 8 ? "9" : String(index+1);
 
-    return mat;
+    slot.appendChild(number);
+
+    const img =
+      document.createElement("img");
+
+    let imagePath = "";
+
+    if(type === "grass") imagePath=ASSETS.grass;
+    if(type === "dirt") imagePath=ASSETS.dirt;
+    if(type === "stone") imagePath=ASSETS.stone;
+    if(type === "sand") imagePath=ASSETS.sand;
+    if(type === "wood") imagePath=ASSETS.wood;
+    if(type === "leaves") imagePath=ASSETS.leaves;
+    if(type === "glass") imagePath=ASSETS.glass;
+    if(type === "brick") imagePath=ASSETS.brick;
+    if(type === "door") imagePath=ASSETS.door;
+
+    img.src=imagePath;
+
+    img.onerror=()=>{
+      img.style.display="none";
+    };
+
+    slot.appendChild(img);
+
+    slot.addEventListener("click",()=>{
+
+      selectedSlot=index;
+      updateHotbar();
+
+    });
+
+    hotbar.appendChild(slot);
+
+  });
+
 }
 
+function updateHotbar(){
 
-/* =========================================================
-   WORLD SETTINGS
-   ========================================================= */
+  [...hotbar.children].forEach(
+    (slot,index)=>{
+      slot.classList.toggle(
+        "selected",
+        index===selectedSlot
+      );
+    }
+  );
 
-const CHUNK=16;
-
-const MAX_HEIGHT=24;
-
-/*
- * 5x5 active chunks.
- * Much lighter than thousands of individual meshes.
- */
-const RENDER_DISTANCE=2;
-
-let seed=
-    Math.floor(
-        Math.random()*1000000000
-    );
-
-const edits=
-    new Map();
-
-const chunks=
-    new Map();
-
-const chunkMeshes=
-    new Map();
-
-
-/* =========================================================
-   WORLD HASH / NOISE
-   ========================================================= */
-
-function hash(x,z){
-
-    let n=
-        x*374761393+
-        z*668265263+
-        seed*1442695041;
-
-    n=
-        (n^(n>>>13))*
-        1274126177;
-
-    n^=
-        n>>>16;
-
-    return(
-        (n>>>0)/
-        4294967295
-    );
 }
 
-function noise(x,z){
+/* ============================================================
+   WORLD
+   ============================================================ */
 
-    const x0=Math.floor(x);
-    const z0=Math.floor(z);
+const CHUNK_SIZE = 16;
 
-    const fx=x-x0;
-    const fz=z-z0;
+const RENDER_DISTANCE = 2;
 
-    const a=hash(x0,z0);
-    const b=hash(x0+1,z0);
-    const c=hash(x0,z0+1);
-    const d=hash(x0+1,z0+1);
+const SEA_LEVEL = 5;
 
-    const u=
-        fx*fx*(3-2*fx);
+const WORLD_HEIGHT = 22;
 
-    const v=
-        fz*fz*(3-2*fz);
+let worldSeed =
+  Math.floor(Math.random()*4294967295);
 
-    return THREE.MathUtils.lerp(
-        THREE.MathUtils.lerp(a,b,u),
-        THREE.MathUtils.lerp(c,d,u),
-        v
+let chunks = new Map();
+
+let edits = new Map();
+
+let villageKeys = new Set();
+
+let doorSpecs = new Map();
+
+let doorObjects = new Map();
+
+let villagers = [];
+
+let villagerSpecs = new Map();
+
+const SAVE_KEY = "RISHANTCRAFT_SAVE_V6";
+
+/* ============================================================
+   HASH / NOISE
+   ============================================================ */
+
+function hash2(x,z){
+
+  let n =
+    Math.imul(
+      x,
+      374761393
+    ) ^
+    Math.imul(
+      z,
+      668265263
+    ) ^
+    worldSeed;
+
+  n =
+    Math.imul(
+      n ^ (n >>> 13),
+      1274126177
     );
+
+  n =
+    Math.imul(
+      n ^ (n >>> 16),
+      2246822519
+    );
+
+  return (
+    (n >>> 0) /
+    4294967296
+  );
+
 }
 
+function lerp(a,b,t){
 
-/* =========================================================
+  return a + (b-a)*t;
+
+}
+
+function smooth(t){
+
+  return t*t*(3-2*t);
+
+}
+
+function valueNoise(x,z){
+
+  const x0=Math.floor(x);
+  const z0=Math.floor(z);
+
+  const x1=x0+1;
+  const z1=z0+1;
+
+  const tx=smooth(x-x0);
+  const tz=smooth(z-z0);
+
+  const a=hash2(x0,z0);
+  const b=hash2(x1,z0);
+  const c=hash2(x0,z1);
+  const d=hash2(x1,z1);
+
+  return lerp(
+    lerp(a,b,tx),
+    lerp(c,d,tx),
+    tz
+  );
+
+}
+
+/* ============================================================
    TERRAIN
-   ========================================================= */
+   ============================================================ */
 
-function terrain(x,z){
+function isRiver(x,z){
 
-    let h=
-        7+
-        noise(x*.035,z*.035)*8+
-        noise(x*.085,z*.085)*3;
-
-    /*
-     * River
-     */
-    const riverWave=
-        Math.sin(
-            x*.045+
-            Math.sin(z*.018)*3
-        );
-
-    if(
-        Math.abs(riverWave)<.12
-    ){
-        h-=4;
-    }
-
-    /*
-     * Lake areas
-     */
-    const lake=
-        noise(
-            x*.012,
-            z*.012
-        );
-
-    if(lake>.80){
-        h-=5;
-    }
-
-    return Math.max(
-        2,
-        Math.min(
-            20,
-            Math.floor(h)
-        )
+  const wave =
+    Math.sin(
+      z*.035 +
+      Math.sin(x*.018)*2.4
     );
+
+  return Math.abs(wave) < .14;
+
 }
 
+function isLake(x,z){
 
-/* =========================================================
+  return valueNoise(
+    x*.018,
+    z*.018
+  ) > .77;
+
+}
+
+function terrainHeight(x,z){
+
+  let n =
+    valueNoise(x*.035,z*.035)*4.5;
+
+  n +=
+    valueNoise(x*.085,z*.085)*2;
+
+  n +=
+    Math.sin(x*.018)*1.3;
+
+  n +=
+    Math.cos(z*.021)*1.2;
+
+  let h =
+    Math.floor(6+n);
+
+  if(isRiver(x,z)){
+    h -= 4;
+  }
+
+  if(isLake(x,z)){
+    h -= 3;
+  }
+
+  h=Math.max(1,Math.min(14,h));
+
+  return h;
+
+}
+
+function nearWater(x,z){
+
+  for(let dx=-2;dx<=2;dx++){
+
+    for(let dz=-2;dz<=2;dz++){
+
+      if(
+        terrainHeight(
+          x+dx,
+          z+dz
+        ) < SEA_LEVEL
+      ){
+        return true;
+      }
+
+    }
+
+  }
+
+  return false;
+
+}
+
+/* ============================================================
+   TREES
+   ============================================================ */
+
+function treeRoot(rx,rz){
+
+  const h =
+    terrainHeight(rx,rz);
+
+  if(h<=SEA_LEVEL){
+    return false;
+  }
+
+  if(
+    hash2(rx*3+17,rz*5-11) < .88
+  ){
+    return false;
+  }
+
+  for(let dx=-2;dx<=2;dx++){
+
+    for(let dz=-2;dz<=2;dz++){
+
+      if(dx===0 && dz===0) continue;
+
+      if(
+        hash2(
+          (rx+dx)*3+17,
+          (rz+dz)*5-11
+        ) > .92
+      ){
+        return false;
+      }
+
+    }
+
+  }
+
+  return true;
+
+}
+
+function treeBlockAt(x,y,z){
+
+  for(let rx=x-2;rx<=x+2;rx++){
+
+    for(let rz=z-2;rz<=z+2;rz++){
+
+      if(!treeRoot(rx,rz)) continue;
+
+      const ground =
+        terrainHeight(rx,rz);
+
+      const trunkTop =
+        ground+4;
+
+      if(
+        x===rx &&
+        z===rz &&
+        y>=ground+1 &&
+        y<=ground+4
+      ){
+        return "wood";
+      }
+
+      const dy =
+        y-trunkTop;
+
+      if(
+        dy>=-1 &&
+        dy<=2
+      ){
+
+        const radius =
+          dy>=1 ? 1 : 2;
+
+        if(
+          Math.abs(x-rx)<=radius &&
+          Math.abs(z-rz)<=radius
+        ){
+
+          if(
+            Math.abs(x-rx)+
+            Math.abs(z-rz)<=radius+1
+          ){
+            return "leaves";
+          }
+
+        }
+
+      }
+
+    }
+
+  }
+
+  return null;
+
+}
+
+/* ============================================================
    BASE BLOCK
-   ========================================================= */
+   ============================================================ */
 
-function baseBlock(x,y,z){
+function baseBlockAt(x,y,z){
 
-    if(y<0){
-        return "stone";
+  if(y<0){
+    return "stone";
+  }
+
+  if(y>=WORLD_HEIGHT){
+    return "air";
+  }
+
+  const tree =
+    treeBlockAt(x,y,z);
+
+  if(tree){
+    return tree;
+  }
+
+  const h =
+    terrainHeight(x,z);
+
+  if(y<=h){
+
+    if(y===h){
+
+      if(
+        h<=SEA_LEVEL+1 ||
+        nearWater(x,z)
+      ){
+        return "sand";
+      }
+
+      return "grass";
+
     }
 
-    if(y>=MAX_HEIGHT){
-        return null;
+    if(y>=h-2){
+      return "dirt";
     }
 
-    const h=
-        terrain(x,z);
+    return "stone";
 
-    /*
-     * Water level
-     */
-    const SEA=6;
+  }
 
-    /*
-     * Terrain
-     */
-    if(y<=h){
+  /* normal water */
 
-        if(y===h){
+  if(
+    h<SEA_LEVEL &&
+    y<=SEA_LEVEL
+  ){
+    return "water";
+  }
 
-            if(h<=SEA+1){
-                return "sand";
-            }
+  /* waterfall */
 
-            return "grass";
-        }
+  const maxNeighbour =
+    Math.max(
+      terrainHeight(x+1,z),
+      terrainHeight(x-1,z),
+      terrainHeight(x,z+1),
+      terrainHeight(x,z-1)
+    );
 
-        if(y>=h-2){
-            return "dirt";
-        }
+  if(
+    h<SEA_LEVEL &&
+    maxNeighbour-h>=4 &&
+    y<=h+5
+  ){
+    return "water";
+  }
 
-        return "stone";
-    }
+  return "air";
 
-    /*
-     * Lake / river
-     */
-    if(
-        h<SEA &&
-        y<=SEA
-    ){
-        return "water";
-    }
-
-    /*
-     * Simple waterfall
-     */
-    const neighbours=[
-        terrain(x+1,z),
-        terrain(x-1,z),
-        terrain(x,z+1),
-        terrain(x,z-1)
-    ];
-
-    const high=
-        Math.max(...neighbours);
-
-    if(
-        h<SEA &&
-        high-h>=4 &&
-        y>h &&
-        y<=h+4
-    ){
-        return "water";
-    }
-
-    /*
-     * Trees
-     */
-    const rootY=h+1;
-
-    for(let rx=x-2;rx<=x+2;rx++){
-
-        for(let rz=z-2;rz<=z+2;rz++){
-
-            const rh=
-                terrain(rx,rz);
-
-            if(
-                rh<8 ||
-                hash(rx+1000,rz+2000)<.965
-            ){
-                continue;
-            }
-
-            const dy=
-                y-rootY;
-
-            const dx=
-                x-rx;
-
-            const dz=
-                z-rz;
-
-            if(
-                dx===0 &&
-                dz===0 &&
-                dy>=0 &&
-                dy<=4
-            ){
-                return "wood";
-            }
-
-            if(
-                dy>=2 &&
-                dy<=5 &&
-                Math.abs(dx)<=2 &&
-                Math.abs(dz)<=2
-            ){
-                return "leaves";
-            }
-        }
-    }
-
-    return null;
 }
 
+/* ============================================================
+   EDIT SYSTEM
+   ============================================================ */
 
-/* =========================================================
-   GET / SET
-   ========================================================= */
+function blockKey(x,y,z){
 
-function block(x,y,z){
+  return `${x},${y},${z}`;
 
-    x=Math.floor(x);
-    y=Math.floor(y);
-    z=Math.floor(z);
+}
 
-    const k=
-        `${x},${y},${z}`;
+function getBlock(x,y,z){
 
-    if(edits.has(k)){
-        return edits.get(k);
-    }
+  const key =
+    blockKey(x,y,z);
 
-    return baseBlock(x,y,z);
+  if(edits.has(key)){
+    return edits.get(key);
+  }
+
+  return baseBlockAt(x,y,z);
+
 }
 
 function setBlock(x,y,z,type){
 
-    x=Math.floor(x);
-    y=Math.floor(y);
-    z=Math.floor(z);
+  edits.set(
+    blockKey(x,y,z),
+    type
+  );
 
-    if(y<0 || y>=MAX_HEIGHT){
-        return;
-    }
+  rebuildAround(
+    x,y,z
+  );
 
-    edits.set(
-        `${x},${y},${z}`,
-        type
-    );
 }
 
+/* ============================================================
+   CHUNK HELPERS
+   ============================================================ */
 
-/* =========================================================
+function chunkCoord(v){
+
+  return Math.floor(
+    v/CHUNK_SIZE
+  );
+
+}
+
+function chunkKey(cx,cz){
+
+  return `${cx},${cz}`;
+
+}
+
+function isTransparent(type){
+
+  return (
+    type==="air" ||
+    type==="water" ||
+    type==="glass" ||
+    type==="leaves"
+  );
+
+}
+
+function isSolid(type){
+
+  return (
+    type!=="air" &&
+    type!=="water"
+  );
+
+}
+
+function exposedBlock(x,y,z,type){
+
+  const neighbours=[
+    getBlock(x+1,y,z),
+    getBlock(x-1,y,z),
+    getBlock(x,y+1,z),
+    getBlock(x,y-1,z),
+    getBlock(x,y,z+1),
+    getBlock(x,y,z-1)
+  ];
+
+  if(type==="water"){
+
+    return neighbours.some(
+      n=>n==="air" || n!=="water"
+    );
+
+  }
+
+  return neighbours.some(
+    n=>isTransparent(n)
+  );
+
+}
+
+/* ============================================================
+   CHUNK BUILD
+   ============================================================ */
+
+function rebuildChunk(cx,cz){
+
+  const key =
+    chunkKey(cx,cz);
+
+  const old =
+    chunks.get(key);
+
+  if(old){
+
+    worldGroup.remove(old.group);
+
+  }
+
+  const group =
+    new THREE.Group();
+
+  group.name =
+    "chunk_"+key;
+
+  const buckets={};
+
+  BLOCKS.forEach(
+    type=>{
+      buckets[type]=[];
+    }
+  );
+
+  const startX =
+    cx*CHUNK_SIZE;
+
+  const startZ =
+    cz*CHUNK_SIZE;
+
+  for(
+    let x=startX;
+    x<startX+CHUNK_SIZE;
+    x++
+  ){
+
+    for(
+      let z=startZ;
+      z<startZ+CHUNK_SIZE;
+      z++
+    ){
+
+      for(
+        let y=0;
+        y<WORLD_HEIGHT;
+        y++
+      ){
+
+        const type =
+          getBlock(x,y,z);
+
+        if(type==="air") continue;
+
+        if(
+          !exposedBlock(
+            x,y,z,type
+          )
+        ){
+          continue;
+        }
+
+        buckets[type].push({
+          x,y,z
+        });
+
+      }
+
+    }
+
+  }
+
+  Object.keys(buckets).forEach(type=>{
+
+    const arr =
+      buckets[type];
+
+    if(!arr.length) return;
+
+    const mesh =
+      new THREE.InstancedMesh(
+        cubeGeometry,
+        materials[type],
+        arr.length
+      );
+
+    mesh.instanceMatrix.setUsage(
+      THREE.DynamicDrawUsage
+    );
+
+    const matrix =
+      new THREE.Matrix4();
+
+    arr.forEach(
+      (p,index)=>{
+
+        matrix.makeTranslation(
+          p.x+.5,
+          p.y+.5,
+          p.z+.5
+        );
+
+        mesh.setMatrixAt(
+          index,
+          matrix
+        );
+
+      }
+    );
+
+    mesh.instanceMatrix.needsUpdate=true;
+
+    mesh.userData.blockPositions=arr;
+    mesh.userData.blockType=type;
+
+    group.add(mesh);
+
+  });
+
+  worldGroup.add(group);
+
+  chunks.set(
+    key,
+    {
+      cx,
+      cz,
+      group
+    }
+  );
+
+}
+
+/* ============================================================
+   REBUILD NEIGHBOURS
+   ============================================================ */
+
+function rebuildAround(x,y,z){
+
+  const cx =
+    chunkCoord(x);
+
+  const cz =
+    chunkCoord(z);
+
+  for(let dx=-1;dx<=1;dx++){
+
+    for(let dz=-1;dz<=1;dz++){
+
+      const key =
+        chunkKey(
+          cx+dx,
+          cz+dz
+        );
+
+      if(chunks.has(key)){
+
+        rebuildChunk(
+          cx+dx,
+          cz+dz
+        );
+
+      }
+
+    }
+
+  }
+
+}
+
+/* ============================================================
    VILLAGES
-   ========================================================= */
+   ============================================================ */
 
-const villages=
-    new Set();
+function villageChance(cx,cz){
 
-const villageVillagers=[];
+  return hash2(
+    cx*41+7,
+    cz*67-3
+  );
 
-function villageKey(cx,cz){
-    return `${cx},${cz}`;
+}
+
+function makeHouse(
+  hx,
+  hz,
+  ground,
+  id
+){
+
+  const width=5;
+  const depth=5;
+  const wallHeight=3;
+
+  /* floor */
+
+  for(
+    let x=hx;
+    x<hx+width;
+    x++
+  ){
+
+    for(
+      let z=hz;
+      z<hz+depth;
+      z++
+    ){
+
+      setEdit(
+        x,
+        ground,
+        z,
+        "wood"
+      );
+
+    }
+
+  }
+
+  /* walls */
+
+  for(
+    let y=ground+1;
+    y<=ground+wallHeight;
+    y++
+  ){
+
+    for(
+      let x=hx;
+      x<hx+width;
+      x++
+    ){
+
+      for(
+        let z=hz;
+        z<hz+depth;
+        z++
+      ){
+
+        const edge =
+          x===hx ||
+          x===hx+width-1 ||
+          z===hz ||
+          z===hz+depth-1;
+
+        if(!edge) continue;
+
+        setEdit(
+          x,
+          y,
+          z,
+          "wood"
+        );
+
+      }
+
+    }
+
+  }
+
+  /* roof */
+
+  for(
+    let x=hx-1;
+    x<=hx+width;
+    x++
+  ){
+
+    for(
+      let z=hz-1;
+      z<=hz+depth;
+      z++
+    ){
+
+      setEdit(
+        x,
+        ground+wallHeight+1,
+        z,
+        "brick"
+      );
+
+    }
+
+  }
+
+  /* door opening */
+
+  const doorX =
+    hx+2;
+
+  const doorZ =
+    hz;
+
+  setEdit(
+    doorX,
+    ground+1,
+    doorZ,
+    "air"
+  );
+
+  setEdit(
+    doorX,
+    ground+2,
+    doorZ,
+    "air"
+  );
+
+  addDoorSpec({
+    id:id+"_door",
+    x:doorX,
+    y:ground+1,
+    z:doorZ,
+    rotation:0,
+    open:false,
+    custom:false
+  });
+
+}
+
+/* helper because setBlock rebuilds too much during village creation */
+
+function setEdit(x,y,z,type){
+
+  edits.set(
+    blockKey(x,y,z),
+    type
+  );
+
+}
+
+function addDoorSpec(spec){
+
+  doorSpecs.set(
+    spec.id,
+    spec
+  );
+
 }
 
 function generateVillage(cx,cz){
 
-    const vk=
-        villageKey(cx,cz);
+  const key =
+    chunkKey(cx,cz);
 
-    if(villages.has(vk)){
-        return;
-    }
-
-    villages.add(vk);
-
-    const x=
-        cx*CHUNK+7;
-
-    const z=
-        cz*CHUNK+7;
-
-    const ground=
-        terrain(x,z);
-
-    /*
-     * Don't spawn village inside water.
-     */
-    if(ground<8){
-        return;
-    }
-
-    const houses=[
-        [x,z],
-        [x+9,z],
-        [x,z+9],
-        [x+9,z+9]
-    ];
-
-    houses.forEach(
-        ([hx,hz],i)=>{
-            makeHouse(
-                hx,
-                terrain(hx,hz)+1,
-                hz,
-                i
-            );
-        }
-    );
-
-    /*
-     * Villagers
-     */
-    for(let i=0;i<3;i++){
-
-        villageVillagers.push({
-            x:x+3+i*4,
-            z:z+4,
-            homeX:x+5,
-            homeZ:z+5,
-            timer:Math.random()*5,
-            angle:Math.random()*Math.PI*2,
-            object:null
-        });
-    }
-}
-
-function makeHouse(x,y,z,index){
-
-    const W=6;
-    const D=6;
-    const H=4;
-
-    /*
-     * Floor
-     */
-    for(let dx=0;dx<W;dx++){
-
-        for(let dz=0;dz<D;dz++){
-
-            setBlock(
-                x+dx,
-                y,
-                z+dz,
-                "wood"
-            );
-        }
-    }
-
-    /*
-     * Walls
-     */
-    for(let yy=1;yy<=H;yy++){
-
-        for(let dx=0;dx<W;dx++){
-
-            if(
-                !(dx===2 && yy<=2)
-            ){
-
-                setBlock(
-                    x+dx,
-                    y+yy,
-                    z,
-                    "brick"
-                );
-            }
-
-            setBlock(
-                x+dx,
-                y+yy,
-                z+D-1,
-                "brick"
-            );
-        }
-
-        for(let dz=0;dz<D;dz++){
-
-            setBlock(
-                x,
-                y+yy,
-                z+dz,
-                "brick"
-            );
-
-            setBlock(
-                x+W-1,
-                y+yy,
-                z+dz,
-                "brick"
-            );
-        }
-    }
-
-    /*
-     * Roof
-     */
-    for(let dx=-1;dx<=W;dx++){
-
-        for(let dz=-1;dz<=D;dz++){
-
-            setBlock(
-                x+dx,
-                y+H+1,
-                z+dz,
-                "wood"
-            );
-        }
-    }
-
-    /*
-     * Door opening
-     */
-    setBlock(
-        x+2,
-        y+1,
-        z,
-        null
-    );
-
-    setBlock(
-        x+2,
-        y+2,
-        z,
-        null
-    );
-
-    addDoor(
-        x+2,
-        y+1,
-        z,
-        false
-    );
-}
-
-
-/* =========================================================
-   CHUNK MESH GENERATION
-   ========================================================= */
-
-const cube=
-    new THREE.BoxGeometry(
-        1,1,1
-    );
-
-function visibleBlock(x,y,z,type){
-
-    const neighbours=[
-        block(x+1,y,z),
-        block(x-1,y,z),
-        block(x,y+1,z),
-        block(x,y-1,z),
-        block(x,y,z+1),
-        block(x,y,z-1)
-    ];
-
-    /*
-     * Water needs visible surface.
-     */
-    if(type==="water"){
-
-        return neighbours.some(
-            n=>!n || n!=="water"
-        );
-    }
-
-    return neighbours.some(
-        n=>!n ||
-        n==="water" ||
-        n==="glass" ||
-        n==="leaves"
-    );
-}
-
-function rebuildChunk(cx,cz){
-
-    const ck=
-        `${cx},${cz}`;
-
-    const old=
-        chunkMeshes.get(ck);
-
-    if(old){
-
-        scene.remove(old);
-    }
-
-    const group=
-        new THREE.Group();
-
-    /*
-     * Store positions by material.
-     */
-    const buckets={};
-
-    const sx=
-        cx*CHUNK;
-
-    const sz=
-        cz*CHUNK;
-
-    for(let x=sx;x<sx+CHUNK;x++){
-
-        for(let z=sz;z<sz+CHUNK;z++){
-
-            for(
-                let y=0;
-                y<MAX_HEIGHT;
-                y++
-            ){
-
-                const type=
-                    block(x,y,z);
-
-                if(!type) continue;
-
-                if(type==="door") continue;
-
-                if(
-                    !visibleBlock(
-                        x,y,z,type
-                    )
-                ){
-                    continue;
-                }
-
-                if(!buckets[type]){
-                    buckets[type]=[];
-                }
-
-                buckets[type].push({
-                    x,y,z
-                });
-            }
-        }
-    }
-
-    for(
-        const type of Object.keys(buckets)
-    ){
-
-        const list=
-            buckets[type];
-
-        if(!list.length) continue;
-
-        const mesh=
-            new THREE.InstancedMesh(
-                cube,
-                material(type),
-                list.length
-            );
-
-        const dummy=
-            new THREE.Object3D();
-
-        for(
-            let i=0;
-            i<list.length;
-            i++
-        ){
-
-            const p=list[i];
-
-            dummy.position.set(
-                p.x+.5,
-                p.y+.5,
-                p.z+.5
-            );
-
-            dummy.rotation.set(
-                0,0,0
-            );
-
-            dummy.scale.set(
-                1,1,1
-            );
-
-            dummy.updateMatrix();
-
-            mesh.setMatrixAt(
-                i,
-                dummy.matrix
-            );
-        }
-
-        mesh.instanceMatrix.needsUpdate=true;
-
-        mesh.userData.blocks=
-            list;
-
-        mesh.userData.type=
-            type;
-
-        group.add(mesh);
-    }
-
-    scene.add(group);
-
-    chunkMeshes.set(
-        ck,
-        group
-    );
-}
-
-
-/* =========================================================
-   CHUNK LOADING
-   ========================================================= */
-
-function loadChunksAroundPlayer(){
-
-    const pcx=
-        Math.floor(
-            player.x/CHUNK
-        );
-
-    const pcz=
-        Math.floor(
-            player.z/CHUNK
-        );
-
-    for(
-        let dx=-RENDER_DISTANCE;
-        dx<=RENDER_DISTANCE;
-        dx++
-    ){
-
-        for(
-            let dz=-RENDER_DISTANCE;
-            dz<=RENDER_DISTANCE;
-            dz++
-        ){
-
-            const cx=pcx+dx;
-            const cz=pcz+dz;
-
-            const ck=
-                `${cx},${cz}`;
-
-            if(!chunks.has(ck)){
-
-                chunks.set(
-                    ck,
-                    true
-                );
-
-                generateVillage(
-                    cx,
-                    cz
-                );
-
-                rebuildChunk(
-                    cx,
-                    cz
-                );
-            }
-        }
-    }
-
-    /*
-     * Rebuild chunks around newly generated villages.
-     */
-    for(
-        let dx=-RENDER_DISTANCE;
-        dx<=RENDER_DISTANCE;
-        dx++
-    ){
-
-        for(
-            let dz=-RENDER_DISTANCE;
-            dz<=RENDER_DISTANCE;
-            dz++
-        ){
-
-            const cx=pcx+dx;
-            const cz=pcz+dz;
-
-            rebuildChunk(
-                cx,
-                cz
-            );
-        }
-    }
-
-    /*
-     * Unload distant chunks.
-     */
-    for(
-        const [ck,group]
-        of chunkMeshes
-    ){
-
-        const [cx,cz]=
-            ck.split(",").map(Number);
-
-        if(
-            Math.abs(cx-pcx)>
-                RENDER_DISTANCE+1 ||
-            Math.abs(cz-pcz)>
-                RENDER_DISTANCE+1
-        ){
-
-            scene.remove(group);
-
-            chunkMeshes.delete(ck);
-            chunks.delete(ck);
-        }
-    }
-}
-
-
-/* =========================================================
-   PLAYER
-   ========================================================= */
-
-const player={
-
-    x:.5,
-    y:10,
-    z:.5,
-
-    velocityY:0,
-
-    yaw:0,
-    pitch:0,
-
-    height:1.8,
-    radius:.28,
-
-    onGround:false
-};
-
-function solid(x,y,z){
-
-    const b=
-        block(
-            Math.floor(x),
-            Math.floor(y),
-            Math.floor(z)
-        );
-
-    return (
-        b &&
-        b!=="water" &&
-        b!=="leaves" &&
-        b!=="glass" &&
-        b!=="door"
-    );
-}
-
-function collision(px,py,pz){
-
-    const r=
-        player.radius;
-
-    const minX=
-        Math.floor(px-r);
-
-    const maxX=
-        Math.floor(px+r);
-
-    const minY=
-        Math.floor(py);
-
-    const maxY=
-        Math.floor(
-            py+player.height-.05
-        );
-
-    const minZ=
-        Math.floor(pz-r);
-
-    const maxZ=
-        Math.floor(pz+r);
-
-    for(
-        let x=minX;
-        x<=maxX;
-        x++
-    ){
-
-        for(
-            let y=minY;
-            y<=maxY;
-            y++
-        ){
-
-            for(
-                let z=minZ;
-                z<=maxZ;
-                z++
-            ){
-
-                if(solid(x,y,z)){
-                    return true;
-                }
-            }
-        }
-    }
-
+  if(villageKeys.has(key)){
     return false;
+  }
+
+  villageKeys.add(key);
+
+  const chance =
+    villageChance(cx,cz);
+
+  if(chance > .14){
+    return false;
+  }
+
+  const centerX =
+    cx*CHUNK_SIZE+8;
+
+  const centerZ =
+    cz*CHUNK_SIZE+8;
+
+  const centerH =
+    terrainHeight(
+      centerX,
+      centerZ
+    );
+
+  if(centerH<=SEA_LEVEL+1){
+    return false;
+  }
+
+  const base =
+    centerH;
+
+  makeHouse(
+    centerX-10,
+    centerZ-3,
+    terrainHeight(centerX-10,centerZ-3),
+    key+"_A"
+  );
+
+  makeHouse(
+    centerX+5,
+    centerZ-3,
+    terrainHeight(centerX+5,centerZ-3),
+    key+"_B"
+  );
+
+  makeHouse(
+    centerX-3,
+    centerZ+7,
+    terrainHeight(centerX-3,centerZ+7),
+    key+"_C"
+  );
+
+  /* villagers */
+
+  addVillagerSpec(
+    key+"_V1",
+    centerX-8,
+    centerZ
+  );
+
+  addVillagerSpec(
+    key+"_V2",
+    centerX+8,
+    centerZ
+  );
+
+  return true;
+
 }
 
+/* ============================================================
+   VILLAGERS
+   ============================================================ */
 
-/* =========================================================
-   KEYBOARD
-   ========================================================= */
+function addVillagerSpec(id,x,z){
 
-const keys={};
-
-document.addEventListener(
-    "keydown",
-    e=>{
-
-        keys[e.code]=true;
-
-        if(
-            e.code==="Space" &&
-            player.onGround
-        ){
-
-            player.velocityY=8.3;
-        }
-
-        if(
-            e.code==="KeyE" &&
-            gameStarted
-        ){
-
-            togglePause();
-        }
-
-        if(
-            e.code.startsWith("Digit")
-        ){
-
-            const n=
-                parseInt(
-                    e.code.replace(
-                        "Digit",
-                        ""
-                    )
-                )-1;
-
-            if(n>=0 && n<9){
-
-                selected=n;
-
-                updateHotbar();
-            }
-        }
-    }
-);
-
-document.addEventListener(
-    "keyup",
-    e=>{
-        keys[e.code]=false;
-    }
-);
-
-
-/* =========================================================
-   CAMERA / MOUSE
-   ========================================================= */
-
-let locked=false;
-
-canvas.addEventListener(
-    "click",
-    ()=>{
-
-        if(
-            gameStarted &&
-            !mobile()
-        ){
-
-            canvas.requestPointerLock();
-        }
-    }
-);
-
-document.addEventListener(
-    "pointerlockchange",
-    ()=>{
-
-        locked=
-            document.pointerLockElement===
-            canvas;
-    }
-);
-
-document.addEventListener(
-    "mousemove",
-    e=>{
-
-        if(
-            !gameStarted ||
-            paused ||
-            !locked
-        ){
-            return;
-        }
-
-        player.yaw-=
-            e.movementX*.0025;
-
-        player.pitch-=
-            e.movementY*.0025;
-
-        player.pitch=
-            Math.max(
-                -1.52,
-                Math.min(
-                    1.52,
-                    player.pitch
-                )
-            );
-    }
-);
-
-
-/* =========================================================
-   PLAYER MOVEMENT
-   ========================================================= */
-
-let mobileForward=0;
-let mobileSide=0;
-
-function updatePlayer(dt){
-
-    if(paused) return;
-
-    let forward=0;
-    let side=0;
-
-    if(keys.KeyW) forward++;
-    if(keys.KeyS) forward--;
-    if(keys.KeyD) side++;
-    if(keys.KeyA) side--;
-
-    forward+=mobileForward;
-    side+=mobileSide;
-
-    const len=
-        Math.hypot(
-            forward,
-            side
-        );
-
-    if(len>1){
-
-        forward/=len;
-        side/=len;
-    }
-
-    const sprint=
-        keys.ShiftLeft ||
-        keys.ShiftRight;
-
-    const speed=
-        sprint
-        ? 8
-        : 5.2;
-
-    const sin=
-        Math.sin(player.yaw);
-
-    const cos=
-        Math.cos(player.yaw);
-
-    const dx=
-        -sin*forward+
-        cos*side;
-
-    const dz=
-        -cos*forward-
-        sin*side;
-
-    let vx=
-        dx*speed;
-
-    let vz=
-        dz*speed;
-
-    /*
-     * X
-     */
-    const nx=
-        player.x+vx*dt;
-
-    if(
-        !collision(
-            nx,
-            player.y,
-            player.z
-        )
-    ){
-
-        player.x=nx;
-    }
-
-    /*
-     * Z
-     */
-    const nz=
-        player.z+vz*dt;
-
-    if(
-        !collision(
-            player.x,
-            player.y,
-            nz
-        )
-    ){
-
-        player.z=nz;
-    }
-
-    /*
-     * Gravity
-     */
-    player.velocityY-=22*dt;
-
-    const ny=
-        player.y+
-        player.velocityY*dt;
-
-    if(
-        !collision(
-            player.x,
-            ny,
-            player.z
-        )
-    ){
-
-        player.y=ny;
-        player.onGround=false;
-
-    }else{
-
-        if(
-            player.velocityY<0
-        ){
-
-            player.onGround=true;
-        }
-
-        player.velocityY=0;
-    }
-
-    /*
-     * Respawn
-     */
-    if(player.y<-15){
-
-        player.y=
-            terrain(
-                Math.floor(player.x),
-                Math.floor(player.z)
-            )+2;
-    }
-
-    camera.position.set(
-        player.x,
-        player.y+1.62,
-        player.z
+  const h =
+    terrainHeight(
+      Math.floor(x),
+      Math.floor(z)
     );
 
-    camera.rotation.y=
-        player.yaw;
+  if(h<=SEA_LEVEL){
+    return;
+  }
 
-    camera.rotation.x=
-        player.pitch;
-
-    /*
-     * Walking sound
-     */
-    if(
-        Math.abs(vx)+
-        Math.abs(vz)>.2 &&
-        player.onGround
-    ){
-
-        playWalk();
-
-    }else{
-
-        stopWalk();
+  villagerSpecs.set(
+    id,
+    {
+      id,
+      x,
+      y:h+1,
+      z,
+      homeX:x,
+      homeZ:z,
+      targetX:x,
+      targetZ:z,
+      timer:Math.random()*3
     }
+  );
+
 }
 
+function createVillagerSprite(spec){
 
-/* =========================================================
-   RAYCASTING
-   ========================================================= */
+  const canvas =
+    document.createElement("canvas");
 
-const raycaster=
-    new THREE.Raycaster();
+  canvas.width=64;
+  canvas.height=96;
 
-function target(){
+  const ctx =
+    canvas.getContext("2d");
 
-    raycaster.setFromCamera(
-        new THREE.Vector2(0,0),
-        camera
-    );
+  /* original simple villager texture */
 
-    const objects=[];
+  ctx.fillStyle="#7b4d2a";
+  ctx.fillRect(18,10,28,25);
 
-    for(
-        const group
-        of chunkMeshes.values()
-    ){
+  ctx.fillStyle="#d39b68";
+  ctx.fillRect(20,14,24,20);
 
-        objects.push(
-            ...group.children
-        );
-    }
+  ctx.fillStyle="#111";
+  ctx.fillRect(25,21,4,4);
+  ctx.fillRect(36,21,4,4);
 
-    /*
-     * Doors first
-     */
-    objects.push(
-        ...doorObjects
-    );
+  ctx.fillStyle="#5c3a22";
+  ctx.fillRect(20,35,24,28);
 
-    const hits=
-        raycaster.intersectObjects(
-            objects,
-            true
-        );
+  ctx.fillStyle="#263d7b";
+  ctx.fillRect(20,63,10,24);
+  ctx.fillRect(34,63,10,24);
 
-    for(const hit of hits){
+  const tex =
+    new THREE.CanvasTexture(canvas);
 
-        if(hit.distance>7){
-            continue;
-        }
+  tex.colorSpace =
+    THREE.SRGBColorSpace;
 
-        if(
-            hit.object.userData &&
-            hit.object.userData.door
-        ){
+  const mat =
+    new THREE.SpriteMaterial({
+      map:tex,
+      transparent:true
+    });
 
-            return {
-                type:"door",
-                object:hit.object,
-                distance:hit.distance
-            };
-        }
+  const sprite =
+    new THREE.Sprite(mat);
 
-        if(
-            hit.object.isInstancedMesh &&
-            hit.instanceId!==undefined
-        ){
+  sprite.scale.set(
+    1.0,
+    1.7,
+    1
+  );
 
-            const p=
-                hit.object.userData.blocks[
-                    hit.instanceId
-                ];
+  sprite.userData.villagerId =
+    spec.id;
 
-            if(p){
+  return sprite;
 
-                return {
-                    type:"block",
-                    x:p.x,
-                    y:p.y,
-                    z:p.z,
-                    mesh:hit.object,
-                    face:hit.face,
-                    distance:hit.distance
-                };
-            }
-        }
-    }
-
-    return null;
 }
 
+function syncVillagers(){
 
-/* =========================================================
-   BREAK
-   ========================================================= */
+  villagers.forEach(v=>{
+    v.sprite.removeFromParent();
+  });
 
-function breakBlock(){
+  villagers=[];
 
-    const t=target();
+  villagerSpecs.forEach(spec=>{
 
-    if(!t) return;
+    const cx =
+      chunkCoord(spec.x);
 
-    if(t.type==="door"){
+    const cz =
+      chunkCoord(spec.z);
 
-        removeDoor(
-            t.object.userData.door
-        );
-
-        playBreak();
-
-        return;
+    if(
+      !chunks.has(
+        chunkKey(cx,cz)
+      )
+    ){
+      return;
     }
 
-    setBlock(
-        t.x,
-        t.y,
-        t.z,
-        null
+    const sprite =
+      createVillagerSprite(spec);
+
+    sprite.position.set(
+      spec.x+.5,
+      spec.y+0.8,
+      spec.z+.5
     );
 
-    rebuildNear(
-        t.x,
-        t.z
-    );
+    scene.add(sprite);
 
-    playBreak();
+    villagers.push({
+      spec,
+      sprite
+    });
 
-    toast(
-        "Block broken"
-    );
+  });
+
 }
 
-
-/* =========================================================
-   PLACE
-   ========================================================= */
-
-let selected=0;
-
-const hotbarTypes=[
-    "grass",
-    "dirt",
-    "stone",
-    "sand",
-    "wood",
-    "leaves",
-    "glass",
-    "brick",
-    "door"
-];
-
-function place(){
-
-    const t=target();
-
-    if(
-        !t ||
-        t.type!=="block" ||
-        !t.face
-    ){
-        return;
-    }
-
-    const nx=
-        Math.round(t.face.normal.x);
-
-    const ny=
-        Math.round(t.face.normal.y);
-
-    const nz=
-        Math.round(t.face.normal.z);
-
-    const x=t.x+nx;
-    const y=t.y+ny;
-    const z=t.z+nz;
-
-    if(
-        y<0 ||
-        y>=MAX_HEIGHT
-    ){
-        return;
-    }
-
-    const type=
-        hotbarTypes[selected];
-
-    /*
-     * Door
-     */
-    if(type==="door"){
-
-        if(
-            !block(x,y,z) &&
-            !block(x,y+1,z)
-        ){
-
-            addDoor(
-                x,
-                y,
-                z,
-                true
-            );
-
-            toast(
-                "Door placed"
-            );
-        }
-
-        return;
-    }
-
-    if(
-        !block(x,y,z)
-    ){
-
-        /*
-         * Prevent placing inside player.
-         */
-        if(
-            x===Math.floor(player.x) &&
-            z===Math.floor(player.z)
-        ){
-            return;
-        }
-
-        setBlock(
-            x,y,z,type
-        );
-
-        rebuildNear(
-            x,z
-        );
-
-        toast(
-            type+" placed"
-        );
-    }
-}
-
-
-/* =========================================================
+/* ============================================================
    DOORS
-   ========================================================= */
+   ============================================================ */
 
-const doorObjects=[];
-const doors=[];
+function createDoorObject(spec){
 
-function addDoor(
-    x,
-    y,
-    z,
-    custom=true
-){
+  const pivot =
+    new THREE.Group();
 
-    const door={
-        x,
-        y,
-        z,
-        open:false,
-        target:0,
-        custom
-    };
+  pivot.position.set(
+    spec.x+.02,
+    spec.y,
+    spec.z+.03
+  );
 
-    const pivot=
-        new THREE.Group();
-
-    pivot.position.set(
-        x+.05,
-        y,
-        z+.05
+  const geometry =
+    new THREE.PlaneGeometry(
+      .95,
+      1.95
     );
 
-    const geo=
-        new THREE.PlaneGeometry(
-            .9,
-            1.95
-        );
+  const material =
+    new THREE.MeshLambertMaterial({
+      map:textures.door,
+      transparent:true,
+      side:THREE.DoubleSide
+    });
 
-    const mat=
-        new THREE.MeshLambertMaterial({
-            map:texture(
-                ASSETS.door
-            ),
-            side:THREE.DoubleSide
-        });
-
-    const mesh=
-        new THREE.Mesh(
-            geo,
-            mat
-        );
-
-    mesh.position.set(
-        .45,
-        .975,
-        0
+  const mesh =
+    new THREE.Mesh(
+      geometry,
+      material
     );
 
-    mesh.userData.door=door;
+  mesh.position.set(
+    .475,
+    .975,
+    0
+  );
 
-    pivot.add(mesh);
+  mesh.rotation.y =
+    spec.rotation || 0;
 
-    door.pivot=pivot;
-    door.mesh=mesh;
+  mesh.userData.doorId =
+    spec.id;
 
-    scene.add(pivot);
+  pivot.add(mesh);
 
-    doorObjects.push(mesh);
-    doors.push(door);
+  pivot.rotation.y =
+    spec.open
+      ? Math.PI/2
+      : 0;
 
-    /*
-     * Door occupies two blocks logically.
-     */
-    setBlock(
-        x,y,z,
-        null
-    );
+  pivot.userData.doorId =
+    spec.id;
 
-    setBlock(
-        x,y+1,z,
-        null
-    );
+  pivot.userData.currentAngle =
+    spec.open
+      ? Math.PI/2
+      : 0;
 
-    return door;
+  pivot.userData.targetAngle =
+    spec.open
+      ? Math.PI/2
+      : 0;
+
+  return pivot;
+
 }
 
-function removeDoor(door){
+function syncDoors(){
 
-    if(!door) return;
+  doorObjects.forEach(obj=>{
+    obj.removeFromParent();
+  });
 
-    scene.remove(
-        door.pivot
-    );
+  doorObjects.clear();
 
-    const oi=
-        doorObjects.indexOf(
-            door.mesh
-        );
+  doorSpecs.forEach(spec=>{
 
-    if(oi>=0){
-        doorObjects.splice(oi,1);
+    const cx =
+      chunkCoord(spec.x);
+
+    const cz =
+      chunkCoord(spec.z);
+
+    if(
+      !chunks.has(
+        chunkKey(cx,cz)
+      )
+    ){
+      return;
     }
 
-    const di=
-        doors.indexOf(door);
+    const object =
+      createDoorObject(spec);
 
-    if(di>=0){
-        doors.splice(di,1);
-    }
+    scene.add(object);
 
-    toast(
-        "Door removed"
+    doorObjects.set(
+      spec.id,
+      object
     );
+
+  });
+
 }
 
-function toggleDoor(door){
+function toggleDoor(id){
 
-    if(!door) return;
+  const spec =
+    doorSpecs.get(id);
 
-    door.open=
-        !door.open;
+  const obj =
+    doorObjects.get(id);
 
-    door.target=
-        door.open
-        ? Math.PI/2
-        : 0;
+  if(!spec || !obj){
+    return;
+  }
+
+  spec.open =
+    !spec.open;
+
+  obj.userData.targetAngle =
+    spec.open
+      ? Math.PI/2
+      : 0;
+
 }
-
-
-/* =========================================================
-   DOOR ANIMATION
-   ========================================================= */
 
 function updateDoors(dt){
 
-    for(const door of doors){
+  doorObjects.forEach(
+    (obj,id)=>{
 
-        if(!door.pivot) continue;
+      const target =
+        obj.userData.targetAngle;
 
-        door.pivot.rotation.y=
-            THREE.MathUtils.lerp(
-                door.pivot.rotation.y,
-                door.target,
-                Math.min(
-                    1,
-                    dt*8
-                )
-            );
+      let current =
+        obj.userData.currentAngle;
+
+      current +=
+        (target-current) *
+        Math.min(1,dt*10);
+
+      obj.userData.currentAngle =
+        current;
+
+      obj.rotation.y =
+        current;
+
     }
+  );
+
 }
 
+/* ============================================================
+   CHUNK STREAMING
+   ============================================================ */
 
-/* =========================================================
-   CLICK
-   ========================================================= */
+let lastChunkX=999999;
+let lastChunkZ=999999;
 
-canvas.addEventListener(
-    "mousedown",
-    e=>{
+function updateChunks(){
 
-        if(
-            !gameStarted ||
-            paused
-        ){
-            return;
-        }
+  const pcx =
+    chunkCoord(player.x);
 
-        if(e.button===0){
+  const pcz =
+    chunkCoord(player.z);
 
-            breakBlock();
+  if(
+    pcx===lastChunkX &&
+    pcz===lastChunkZ
+  ){
+    return;
+  }
 
-        }else if(e.button===2){
+  lastChunkX=pcx;
+  lastChunkZ=pcz;
 
-            const t=target();
+  let newVillage=false;
 
-            if(
-                t &&
-                t.type==="door"
-            ){
-
-                toggleDoor(
-                    t.object.userData.door
-                );
-
-            }else{
-
-                place();
-            }
-        }
-    }
-);
-
-canvas.addEventListener(
-    "contextmenu",
-    e=>e.preventDefault()
-);
-
-
-/* =========================================================
-   REBUILD NEARBY
-   ========================================================= */
-
-function rebuildNear(x,z){
-
-    const cx=
-        Math.floor(x/CHUNK);
-
-    const cz=
-        Math.floor(z/CHUNK);
-
-    for(let dx=-1;dx<=1;dx++){
-
-        for(let dz=-1;dz<=1;dz++){
-
-            const ck=
-                `${cx+dx},${cz+dz}`;
-
-            if(
-                chunks.has(ck)
-            ){
-
-                rebuildChunk(
-                    cx+dx,
-                    cz+dz
-                );
-            }
-        }
-    }
-}
-
-
-/* =========================================================
-   HOTBAR
-   ========================================================= */
-
-function updateHotbar(){
-
-    const bar=
-        document.getElementById(
-            "hotbar"
-        );
-
-    bar.innerHTML="";
-
-    hotbarTypes.forEach(
-        (type,i)=>{
-
-            const div=
-                document.createElement(
-                    "div"
-                );
-
-            div.className=
-                "slot"+
-                (
-                    i===selected
-                    ?" selected"
-                    :""
-                );
-
-            const img=
-                document.createElement(
-                    "img"
-                );
-
-            img.src=
-                BLOCK_DATA[type]
-                ?BLOCK_DATA[type].map
-                :ASSETS.door;
-
-            img.onerror=()=>{
-                img.style.display="none";
-            };
-
-            const span=
-                document.createElement(
-                    "span"
-                );
-
-            span.textContent=
-                i+1;
-
-            div.appendChild(img);
-            div.appendChild(span);
-
-            div.onclick=()=>{
-                selected=i;
-                updateHotbar();
-            };
-
-            bar.appendChild(div);
-        }
-    );
-}
-
-updateHotbar();
-
-
-/* =========================================================
-   WHEEL
-   ========================================================= */
-
-window.addEventListener(
-    "wheel",
-    e=>{
-
-        if(
-            !gameStarted ||
-            paused
-        ){
-            return;
-        }
-
-        if(e.deltaY>0){
-
-            selected=
-                (selected+1)%
-                hotbarTypes.length;
-
-        }else{
-
-            selected=
-                (
-                    selected-1+
-                    hotbarTypes.length
-                )%
-                hotbarTypes.length;
-        }
-
-        updateHotbar();
-    }
-);
-
-
-/* =========================================================
-   SOUND
-   ========================================================= */
-
-let music=null;
-let walk=null;
-let breaking=null;
-
-function setupAudio(){
-
-    if(music) return;
-
-    music=
-        new Audio(
-            ASSETS.music
-        );
-
-    walk=
-        new Audio(
-            ASSETS.walkSound
-        );
-
-    breaking=
-        new Audio(
-            ASSETS.breakSound
-        );
-
-    music.loop=true;
-    walk.loop=true;
-
-    music.volume=.28;
-    walk.volume=.28;
-    breaking.volume=.6;
-
-    music.preload="auto";
-    walk.preload="auto";
-    breaking.preload="auto";
-}
-
-function playMenuMusic(){
-
-    setupAudio();
-
-    music.play().catch(
-        ()=>{}
-    );
-}
-
-function stopMenuMusic(){
-
-    if(!music) return;
-
-    music.pause();
-    music.currentTime=0;
-}
-
-function playWalk(){
-
-    setupAudio();
-
-    if(
-        walk.paused
-    ){
-
-        walk.play().catch(
-            ()=>{}
-        );
-    }
-}
-
-function stopWalk(){
-
-    if(!walk) return;
-
-    walk.pause();
-    walk.currentTime=0;
-}
-
-function playBreak(){
-
-    setupAudio();
-
-    breaking.currentTime=0;
-
-    breaking.play().catch(
-        ()=>{}
-    );
-}
-
-
-/*
- * Unlock audio on user gesture.
- */
-document.addEventListener(
-    "pointerdown",
-    ()=>{
-        setupAudio();
-
-        if(!gameStarted){
-            playMenuMusic();
-        }
-    }
-);
-
-
-/* =========================================================
-   VILLAGER FBX
-   ========================================================= */
-
-let fbxLoaded=false;
-
-function loadVillagerModel(){
-
-    if(
-        fbxLoaded ||
-        typeof THREE.FBXLoader==="undefined"
-    ){
-        return;
-    }
-
-    fbxLoaded=true;
-
-    const fbxLoader=
-        new THREE.FBXLoader();
-
-    fbxLoader.load(
-
-        ASSETS.villagerModel,
-
-        object=>{
-
-            object.scale.set(
-                .012,
-                .012,
-                .012
-            );
-
-            object.traverse(
-                child=>{
-
-                    if(!child.isMesh){
-                        return;
-                    }
-
-                    const mat=
-                        new THREE.MeshStandardMaterial({
-                            map:texture(
-                                ASSETS.villagerDiffuse
-                            ),
-                            normalMap:texture(
-                                ASSETS.villagerNormal
-                            ),
-                            metalness:.15,
-                            roughness:.8
-                        });
-
-                    child.material=mat;
-
-                    child.castShadow=false;
-                    child.receiveShadow=false;
-                }
-            );
-
-            /*
-             * Put villagers into the world.
-             */
-            villageVillagers.forEach(
-                data=>{
-
-                    if(data.object){
-                        return;
-                    }
-
-                    const clone=
-                        object.clone(true);
-
-                    clone.position.set(
-                        data.x,
-                        terrain(
-                            Math.floor(data.x),
-                            Math.floor(data.z)
-                        )+1,
-                        data.z
-                    );
-
-                    scene.add(clone);
-
-                    data.object=clone;
-                }
-            );
-
-        },
-
-        undefined,
-
-        error=>{
-
-            console.warn(
-                "Villager FBX could not load",
-                error
-            );
-        }
-    );
-}
-
-
-/* =========================================================
-   VILLAGER MOVEMENT
-   ========================================================= */
-
-function updateVillagers(dt){
+  for(
+    let dx=-RENDER_DISTANCE;
+    dx<=RENDER_DISTANCE;
+    dx++
+  ){
 
     for(
-        const v
-        of villageVillagers
+      let dz=-RENDER_DISTANCE;
+      dz<=RENDER_DISTANCE;
+      dz++
     ){
 
-        if(!v.object){
-            continue;
+      const cx=pcx+dx;
+      const cz=pcz+dz;
+
+      const key=
+        chunkKey(cx,cz);
+
+      if(!chunks.has(key)){
+
+        if(
+          generateVillage(cx,cz)
+        ){
+          newVillage=true;
         }
 
-        v.timer-=dt;
+        rebuildChunk(cx,cz);
 
-        if(v.timer<=0){
+      }
 
-            v.timer=
-                2+
-                Math.random()*4;
+    }
 
-            v.angle=
-                Math.random()*
-                Math.PI*2;
-        }
+  }
 
-        v.x+=
-            Math.cos(v.angle)*
-            .45*
-            dt;
+  /* unload */
 
-        v.z+=
-            Math.sin(v.angle)*
-            .45*
-            dt;
+  const unloadDistance =
+    RENDER_DISTANCE+1;
 
-        /*
-         * Keep villager near village.
-         */
-        const distance=
-            Math.hypot(
-                v.x-v.homeX,
-                v.z-v.homeZ
-            );
+  [...chunks.entries()].forEach(
+    ([key,data])=>{
 
-        if(distance>10){
+      if(
+        Math.abs(data.cx-pcx)>
+        unloadDistance ||
+        Math.abs(data.cz-pcz)>
+        unloadDistance
+      ){
 
-            v.angle=
-                Math.atan2(
-                    v.homeZ-v.z,
-                    v.homeX-v.x
-                );
-        }
-
-        const gy=
-            terrain(
-                Math.floor(v.x),
-                Math.floor(v.z)
-            );
-
-        v.object.position.set(
-            v.x,
-            gy+1,
-            v.z
+        worldGroup.remove(
+          data.group
         );
 
-        v.object.rotation.y=
-            -v.angle;
+        chunks.delete(key);
+
+      }
+
     }
+  );
+
+  if(newVillage){
+
+    chunks.forEach(data=>{
+      rebuildChunk(
+        data.cx,
+        data.cz
+      );
+    });
+
+  }
+
+  syncDoors();
+  syncVillagers();
+
 }
 
+/* ============================================================
+   PLAYER
+   ============================================================ */
 
-/* =========================================================
-   SAVE
-   ========================================================= */
+const player = {
+
+  x:.5,
+  y:8,
+  z:.5,
+
+  velocityY:0,
+
+  radius:.28,
+
+  height:1.8,
+
+  eyeHeight:1.62,
+
+  onGround:false
+
+};
+
+let yaw=0;
+
+let pitch=0;
+
+const keys={};
+
+let gameRunning=false;
+
+let gamePaused=false;
+
+/* ============================================================
+   COLLISION
+   ============================================================ */
+
+function doorCollision(px,py,pz){
+
+  for(
+    const spec of doorSpecs.values()
+  ){
+
+    if(spec.open) continue;
+
+    const dx =
+      Math.abs(
+        px-(spec.x+.5)
+      );
+
+    const dz =
+      Math.abs(
+        pz-(spec.z+.5)
+      );
+
+    if(
+      dx<.48 &&
+      dz<.48 &&
+      py < spec.y+1.9 &&
+      py+1.8 > spec.y
+    ){
+      return true;
+    }
+
+  }
+
+  return false;
+
+}
+
+function collides(px,py,pz){
+
+  const minX =
+    Math.floor(
+      px-player.radius
+    );
+
+  const maxX =
+    Math.floor(
+      px+player.radius
+    );
+
+  const minY =
+    Math.floor(py+.02);
+
+  const maxY =
+    Math.floor(
+      py+player.height-.02
+    );
+
+  const minZ =
+    Math.floor(
+      pz-player.radius
+    );
+
+  const maxZ =
+    Math.floor(
+      pz+player.radius
+    );
+
+  for(
+    let x=minX;
+    x<=maxX;
+    x++
+  ){
+
+    for(
+      let y=minY;
+      y<=maxY;
+      y++
+    ){
+
+      for(
+        let z=minZ;
+        z<=maxZ;
+        z++
+      ){
+
+        const type =
+          getBlock(x,y,z);
+
+        if(isSolid(type)){
+          return true;
+        }
+
+      }
+
+    }
+
+  }
+
+  if(
+    doorCollision(
+      px,py,pz
+    )
+  ){
+    return true;
+  }
+
+  return false;
+
+}
+
+/* ============================================================
+   MOVE
+   ============================================================ */
+
+const forward =
+  new THREE.Vector3();
+
+const right =
+  new THREE.Vector3();
+
+function movePlayer(dt){
+
+  let inputX=0;
+  let inputZ=0;
+
+  if(keys["KeyW"]) inputZ += 1;
+  if(keys["KeyS"]) inputZ -= 1;
+  if(keys["KeyA"]) inputX -= 1;
+  if(keys["KeyD"]) inputX += 1;
+
+  /* mobile joystick */
+
+  inputX += mobileInput.x;
+  inputZ += mobileInput.y;
+
+  inputX =
+    THREE.MathUtils.clamp(
+      inputX,-1,1
+    );
+
+  inputZ =
+    THREE.MathUtils.clamp(
+      inputZ,-1,1
+    );
+
+  let moving =
+    Math.abs(inputX)>.05 ||
+    Math.abs(inputZ)>.05;
+
+  if(moving){
+
+    const length =
+      Math.hypot(
+        inputX,
+        inputZ
+      );
+
+    inputX/=length;
+    inputZ/=length;
+
+  }
+
+  /* camera forward */
+
+  forward.set(
+    0,
+    0,
+    -1
+  );
+
+  forward.applyAxisAngle(
+    new THREE.Vector3(0,1,0),
+    yaw
+  );
+
+  forward.y=0;
+  forward.normalize();
+
+  right.set(
+    forward.z,
+    0,
+    -forward.x
+  );
+
+  let moveX =
+    (
+      forward.x*inputZ +
+      right.x*inputX
+    );
+
+  let moveZ =
+    (
+      forward.z*inputZ +
+      right.z*inputX
+    );
+
+  const sneak =
+    keys["ShiftLeft"] ||
+    keys["ShiftRight"];
+
+  const sprint =
+    (
+      keys["ControlLeft"] ||
+      keys["ControlRight"]
+    ) &&
+    !sneak;
+
+  let speed=5.0;
+
+  if(sneak){
+    speed=2.2;
+  }
+
+  if(sprint){
+    speed=7.0;
+  }
+
+  const dx =
+    moveX*speed*dt;
+
+  const dz =
+    moveZ*speed*dt;
+
+  /* horizontal collision with step-up */
+
+  if(dx!==0){
+
+    if(
+      !collides(
+        player.x+dx,
+        player.y,
+        player.z
+      )
+    ){
+
+      player.x+=dx;
+
+    }else if(
+      player.onGround &&
+      !collides(
+        player.x+dx,
+        player.y+.65,
+        player.z
+      )
+    ){
+
+      player.y+=.65;
+      player.x+=dx;
+
+    }
+
+  }
+
+  if(dz!==0){
+
+    if(
+      !collides(
+        player.x,
+        player.y,
+        player.z+dz
+      )
+    ){
+
+      player.z+=dz;
+
+    }else if(
+      player.onGround &&
+      !collides(
+        player.x,
+        player.y+.65,
+        player.z+dz
+      )
+    ){
+
+      player.y+=.65;
+      player.z+=dz;
+
+    }
+
+  }
+
+  /* gravity */
+
+  player.velocityY -=
+    22*dt;
+
+  if(
+    mobileJump ||
+    (
+      keys["Space"] &&
+      player.onGround
+    )
+  ){
+
+    player.velocityY=8.3;
+
+    player.onGround=false;
+
+    mobileJump=false;
+
+  }
+
+  const newY =
+    player.y+
+    player.velocityY*dt;
+
+  if(
+    !collides(
+      player.x,
+      newY,
+      player.z
+    )
+  ){
+
+    player.y=newY;
+    player.onGround=false;
+
+  }else{
+
+    if(player.velocityY<0){
+
+      player.y=
+        Math.floor(
+          player.y
+        );
+
+      player.onGround=true;
+
+    }
+
+    player.velocityY=0;
+
+  }
+
+  /* prevent falling endlessly */
+
+  if(player.y<-10){
+
+    player.y=
+      terrainHeight(
+        Math.floor(player.x),
+        Math.floor(player.z)
+      )+1;
+
+    player.velocityY=0;
+
+  }
+
+  /* walking sound */
+
+  if(
+    moving &&
+    player.onGround
+  ){
+
+    playWalkSound();
+
+  }else{
+
+    stopWalkSound();
+
+  }
+
+}
+
+/* ============================================================
+   CAMERA
+   ============================================================ */
+
+function updateCamera(){
+
+  camera.position.set(
+    player.x,
+    player.y+player.eyeHeight,
+    player.z
+  );
+
+  camera.rotation.order="YXZ";
+
+  camera.rotation.y=yaw;
+
+  camera.rotation.x=pitch;
+
+}
+
+/* ============================================================
+   MOUSE LOOK
+   ============================================================ */
+
+let pointerLocked=false;
+
+renderer.domElement.addEventListener(
+  "click",
+  ()=>{
+
+    if(
+      gameRunning &&
+      !gamePaused &&
+      !isTouchDevice()
+    ){
+
+      renderer.domElement.requestPointerLock();
+
+    }
+
+  }
+);
+
+document.addEventListener(
+  "pointerlockchange",
+  ()=>{
+
+    pointerLocked =
+      document.pointerLockElement ===
+      renderer.domElement;
+
+    if(
+      gameRunning &&
+      !pointerLocked &&
+      !isTouchDevice()
+    ){
+
+      pauseGame();
+
+    }
+
+  }
+);
+
+document.addEventListener(
+  "mousemove",
+  e=>{
+
+    if(!pointerLocked) return;
+
+    yaw -=
+      e.movementX*.0025;
+
+    pitch -=
+      e.movementY*.0025;
+
+    pitch =
+      THREE.MathUtils.clamp(
+        pitch,
+        -Math.PI/2+.05,
+        Math.PI/2-.05
+      );
+
+  }
+);
+
+/* ============================================================
+   TOUCH LOOK
+   ============================================================ */
+
+let lookTouch=null;
+
+renderer.domElement.addEventListener(
+  "touchstart",
+  e=>{
+
+    if(!gameRunning || gamePaused) return;
+
+    if(e.touches.length!==1) return;
+
+    const t=e.touches[0];
+
+    lookTouch={
+      id:t.identifier,
+      x:t.clientX,
+      y:t.clientY
+    };
+
+  },
+  {passive:false}
+);
+
+renderer.domElement.addEventListener(
+  "touchmove",
+  e=>{
+
+    if(!lookTouch) return;
+
+    for(
+      const t of e.touches
+    ){
+
+      if(
+        t.identifier===
+        lookTouch.id
+      ){
+
+        const dx =
+          t.clientX-lookTouch.x;
+
+        const dy =
+          t.clientY-lookTouch.y;
+
+        /* only look with larger movement */
+
+        yaw -= dx*.004;
+
+        pitch -= dy*.003;
+
+        pitch =
+          THREE.MathUtils.clamp(
+            pitch,
+            -Math.PI/2+.05,
+            Math.PI/2-.05
+          );
+
+        lookTouch.x=t.clientX;
+        lookTouch.y=t.clientY;
+
+        e.preventDefault();
+
+      }
+
+    }
+
+  },
+  {passive:false}
+);
+
+renderer.domElement.addEventListener(
+  "touchend",
+  ()=>{
+    lookTouch=null;
+  },
+  {passive:false}
+);
+
+/* ============================================================
+   MOBILE JOYSTICK
+   ============================================================ */
+
+const mobileInput={
+  x:0,
+  y:0
+};
+
+let joystickActive=false;
+
+function updateJoystick(clientX,clientY){
+
+  const rect =
+    joystick.getBoundingClientRect();
+
+  const centerX =
+    rect.left+rect.width/2;
+
+  const centerY =
+    rect.top+rect.height/2;
+
+  let dx =
+    clientX-centerX;
+
+  let dy =
+    clientY-centerY;
+
+  const max =
+    rect.width*.34;
+
+  const length =
+    Math.hypot(dx,dy);
+
+  if(length>max){
+
+    dx=
+      dx/length*max;
+
+    dy=
+      dy/length*max;
+
+  }
+
+  mobileInput.x =
+    dx/max;
+
+  /* up = forward */
+
+  mobileInput.y =
+    -dy/max;
+
+  joystickKnob.style.transform =
+    `translate(calc(-50% + ${dx}px),calc(-50% + ${dy}px))`;
+
+}
+
+joystick.addEventListener(
+  "touchstart",
+  e=>{
+
+    joystickActive=true;
+
+    const t=e.touches[0];
+
+    updateJoystick(
+      t.clientX,
+      t.clientY
+    );
+
+    e.preventDefault();
+
+  },
+  {passive:false}
+);
+
+joystick.addEventListener(
+  "touchmove",
+  e=>{
+
+    if(!joystickActive) return;
+
+    const t=e.touches[0];
+
+    updateJoystick(
+      t.clientX,
+      t.clientY
+    );
+
+    e.preventDefault();
+
+  },
+  {passive:false}
+);
+
+function resetJoystick(){
+
+  joystickActive=false;
+
+  mobileInput.x=0;
+  mobileInput.y=0;
+
+  joystickKnob.style.transform=
+    "translate(-50%,-50%)";
+
+}
+
+joystick.addEventListener(
+  "touchend",
+  resetJoystick
+);
+
+joystick.addEventListener(
+  "touchcancel",
+  resetJoystick
+);
+
+let mobileJump=false;
+
+/* ============================================================
+   BLOCK RAYCAST
+   ============================================================ */
+
+function getRayObjects(){
+
+  const objects=[];
+
+  chunks.forEach(
+    chunk=>{
+
+      chunk.group.children.forEach(
+        child=>{
+          objects.push(child);
+        }
+      );
+
+    }
+  );
+
+  doorObjects.forEach(
+    object=>{
+      object.traverse(
+        child=>{
+          if(child.isMesh){
+            objects.push(child);
+          }
+        }
+      );
+    }
+  );
+
+  return objects;
+
+}
+
+function getTarget(){
+
+  raycaster.setFromCamera(
+    pointer,
+    camera
+  );
+
+  const objects =
+    getRayObjects();
+
+  const hits =
+    raycaster.intersectObjects(
+      objects,
+      false
+    );
+
+  if(!hits.length){
+    return null;
+  }
+
+  for(
+    const hit of hits
+  ){
+
+    /* door */
+
+    if(
+      hit.object.userData &&
+      hit.object.userData.doorId
+    ){
+
+      return {
+        type:"door",
+        id:hit.object.userData.doorId,
+        distance:hit.distance
+      };
+
+    }
+
+    /* block */
+
+    if(
+      hit.object.isInstancedMesh &&
+      hit.instanceId!==undefined
+    ){
+
+      const arr =
+        hit.object.userData.blockPositions;
+
+      const pos =
+        arr[hit.instanceId];
+
+      if(!pos) continue;
+
+      const normal =
+        hit.face ?
+        hit.face.normal.clone() :
+        new THREE.Vector3(0,1,0);
+
+      return {
+        type:"block",
+        x:pos.x,
+        y:pos.y,
+        z:pos.z,
+        block:pos.type || hit.object.userData.blockType,
+        normal,
+        distance:hit.distance
+      };
+
+    }
+
+  }
+
+  return null;
+
+}
+
+/* ============================================================
+   TARGET UI
+   ============================================================ */
+
+function updateTargetUI(){
+
+  if(!gameRunning){
+
+    targetInfo.textContent="Block: -";
+
+    return;
+
+  }
+
+  const target =
+    getTarget();
+
+  if(!target){
+
+    targetInfo.textContent=
+      "Block: -";
+
+    return;
+
+  }
+
+  if(target.type==="door"){
+
+    const spec =
+      doorSpecs.get(target.id);
+
+    targetInfo.textContent=
+      spec && spec.open
+        ? "Door: OPEN"
+        : "Door: CLOSED";
+
+    return;
+
+  }
+
+  targetInfo.textContent=
+    `Block: ${target.block}  ${target.x},${target.y},${target.z}`;
+
+}
+
+/* ============================================================
+   BREAK ANIMATION
+   ============================================================ */
+
+let breaking=null;
+
+let crackGroup=null;
+
+const crackMaterials=[];
+
+function createCrackTexture(stage){
+
+  const canvas =
+    document.createElement("canvas");
+
+  canvas.width=128;
+  canvas.height=128;
+
+  const ctx =
+    canvas.getContext("2d");
+
+  ctx.clearRect(
+    0,
+    0,
+    128,
+    128
+  );
+
+  ctx.strokeStyle=
+    "rgba(10,10,10,.95)";
+
+  ctx.lineWidth=3;
+
+  ctx.lineCap="round";
+
+  const lines=[
+    [
+      [15,18],
+      [40,48],
+      [31,78],
+      [61,101]
+    ],
+    [
+      [95,14],
+      [75,42],
+      [89,65],
+      [63,85],
+      [70,116]
+    ],
+    [
+      [15,90],
+      [42,75],
+      [61,54],
+      [110,40]
+    ],
+    [
+      [25,25],
+      [63,33],
+      [96,90]
+    ],
+    [
+      [105,110],
+      [80,82],
+      [55,92],
+      [20,110]
+    ]
+  ];
+
+  const count =
+    Math.min(
+      stage+1,
+      lines.length
+    );
+
+  for(let i=0;i<count;i++){
+
+    const line=lines[i];
+
+    ctx.beginPath();
+
+    line.forEach(
+      (p,index)=>{
+
+        if(index===0){
+          ctx.moveTo(
+            p[0],
+            p[1]
+          );
+        }else{
+          ctx.lineTo(
+            p[0],
+            p[1]
+          );
+        }
+
+      }
+    );
+
+    ctx.stroke();
+
+  }
+
+  const tex =
+    new THREE.CanvasTexture(
+      canvas
+    );
+
+  tex.colorSpace=
+    THREE.SRGBColorSpace;
+
+  return tex;
+
+}
+
+function makeCrackFace(
+  position,
+  rotation
+){
+
+  const tex =
+    createCrackTexture(
+      breaking.stage
+    );
+
+  const material =
+    new THREE.MeshBasicMaterial({
+      map:tex,
+      transparent:true,
+      opacity:.9,
+      depthWrite:false,
+      side:THREE.DoubleSide
+    });
+
+  const plane =
+    new THREE.Mesh(
+      new THREE.PlaneGeometry(
+        1.01,
+        1.01
+      ),
+      material
+    );
+
+  plane.position.copy(
+    position
+  );
+
+  plane.rotation.set(
+    rotation.x,
+    rotation.y,
+    rotation.z
+  );
+
+  return plane;
+
+}
+
+function createCrackGroup(x,y,z){
+
+  if(crackGroup){
+
+    scene.remove(
+      crackGroup
+    );
+
+  }
+
+  crackGroup =
+    new THREE.Group();
+
+  const p=.506;
+
+  const faces=[
+
+    {
+      pos:new THREE.Vector3(.5,0,0),
+      rot:new THREE.Euler(0,Math.PI/2,0)
+    },
+
+    {
+      pos:new THREE.Vector3(-.5,0,0),
+      rot:new THREE.Euler(0,Math.PI/2,0)
+    },
+
+    {
+      pos:new THREE.Vector3(0,.5,0),
+      rot:new THREE.Euler(Math.PI/2,0,0)
+    },
+
+    {
+      pos:new THREE.Vector3(0,-.5,0),
+      rot:new THREE.Euler(Math.PI/2,0,0)
+    },
+
+    {
+      pos:new THREE.Vector3(0,0,.5),
+      rot:new THREE.Euler(0,0,0)
+    },
+
+    {
+      pos:new THREE.Vector3(0,0,-.5),
+      rot:new THREE.Euler(0,0,0)
+    }
+
+  ];
+
+  faces.forEach(face=>{
+
+    const mesh =
+      makeCrackFace(
+        face.pos,
+        face.rot
+      );
+
+    crackGroup.add(mesh);
+
+  });
+
+  crackGroup.position.set(
+    x+.5,
+    y+.5,
+    z+.5
+  );
+
+  scene.add(
+    crackGroup
+  );
+
+}
+
+function startBreaking(target){
+
+  if(breaking) return;
+
+  if(target.type!=="block") return;
+
+  if(
+    target.block==="water" ||
+    target.block==="air"
+  ){
+    return;
+  }
+
+  breaking={
+    x:target.x,
+    y:target.y,
+    z:target.z,
+    block:target.block,
+    progress:0,
+    stage:0,
+    duration:.38
+  };
+
+  createCrackGroup(
+    target.x,
+    target.y,
+    target.z
+  );
+
+}
+
+function updateBreaking(dt){
+
+  if(!breaking) return;
+
+  /* cancel if player looks away */
+
+  const target =
+    getTarget();
+
+  if(
+    !target ||
+    target.type!=="block" ||
+    target.x!==breaking.x ||
+    target.y!==breaking.y ||
+    target.z!==breaking.z
+  ){
+
+    if(crackGroup){
+
+      scene.remove(
+        crackGroup
+      );
+
+      crackGroup=null;
+
+    }
+
+    breaking=null;
+
+    return;
+
+  }
+
+  breaking.progress += dt;
+
+  const newStage =
+    Math.min(
+      4,
+      Math.floor(
+        breaking.progress/
+        breaking.duration*5
+      )
+    );
+
+  if(newStage!==breaking.stage){
+
+    breaking.stage=newStage;
+
+    createCrackGroup(
+      breaking.x,
+      breaking.y,
+      breaking.z
+    );
+
+  }
+
+  if(
+    breaking.progress >=
+    breaking.duration
+  ){
+
+    setBlock(
+      breaking.x,
+      breaking.y,
+      breaking.z,
+      "air"
+    );
+
+    playBreakSound();
+
+    if(crackGroup){
+
+      scene.remove(
+        crackGroup
+      );
+
+      crackGroup=null;
+
+    }
+
+    breaking=null;
+
+  }
+
+}
+
+/* ============================================================
+   BREAK / PLACE
+   ============================================================ */
+
+function breakTarget(){
+
+  const target =
+    getTarget();
+
+  if(!target) return;
+
+  if(
+    target.type==="door"
+  ){
+
+    doorSpecs.delete(
+      target.id
+    );
+
+    const object =
+      doorObjects.get(
+        target.id
+      );
+
+    if(object){
+
+      object.removeFromParent();
+
+    }
+
+    doorObjects.delete(
+      target.id
+    );
+
+    playBreakSound();
+
+    return;
+
+  }
+
+  startBreaking(target);
+
+}
+
+function placeTarget(){
+
+  const target =
+    getTarget();
+
+  if(!target) return;
+
+  if(
+    target.type==="door"
+  ){
+
+    toggleDoor(
+      target.id
+    );
+
+    return;
+
+  }
+
+  const type =
+    HOTBAR_BLOCKS[
+      selectedSlot
+    ];
+
+  const nx =
+    target.x+
+    Math.round(
+      target.normal.x
+    );
+
+  const ny =
+    target.y+
+    Math.round(
+      target.normal.y
+    );
+
+  const nz =
+    target.z+
+    Math.round(
+      target.normal.z
+    );
+
+  if(type==="door"){
+
+    placeDoor(
+      nx,
+      ny,
+      nz,
+      target.normal
+    );
+
+    return;
+
+  }
+
+  if(
+    getBlock(
+      nx,ny,nz
+    )!=="air" &&
+    getBlock(
+      nx,ny,nz
+    )!=="water"
+  ){
+    return;
+  }
+
+  /* don't place inside player */
+
+  if(
+    collides(
+      player.x,
+      player.y,
+      player.z
+    )
+  ){
+    return;
+  }
+
+  setBlock(
+    nx,
+    ny,
+    nz,
+    type
+  );
+
+}
+
+/* ============================================================
+   DOOR PLACEMENT
+   ============================================================ */
+
+function placeDoor(
+  x,
+  y,
+  z,
+  normal
+){
+
+  if(
+    Math.abs(normal.y)>.5
+  ){
+    return;
+  }
+
+  if(
+    getBlock(x,y,z)!=="air" &&
+    getBlock(x,y,z)!=="water"
+  ){
+    return;
+  }
+
+  if(
+    getBlock(x,y+1,z)!=="air" &&
+    getBlock(x,y+1,z)!=="water"
+  ){
+    return;
+  }
+
+  if(
+    !isSolid(
+      getBlock(x,y-1,z)
+    )
+  ){
+    return;
+  }
+
+  const id =
+    "custom_"+Date.now();
+
+  const rotation =
+    Math.abs(normal.x)>.5
+      ? Math.PI/2
+      : 0;
+
+  doorSpecs.set(
+    id,
+    {
+      id,
+      x,
+      y,
+      z,
+      rotation,
+      open:false,
+      custom:true
+    }
+  );
+
+  edits.set(
+    blockKey(x,y,z),
+    "air"
+  );
+
+  edits.set(
+    blockKey(x,y+1,z),
+    "air"
+  );
+
+  rebuildAround(
+    x,y,z
+  );
+
+  syncDoors();
+
+}
+
+/* ============================================================
+   MOUSE BUTTONS
+   ============================================================ */
+
+renderer.domElement.addEventListener(
+  "mousedown",
+  e=>{
+
+    if(!gameRunning || gamePaused){
+      return;
+    }
+
+    if(e.button===0){
+
+      breakTarget();
+
+    }
+
+    if(e.button===2){
+
+      placeTarget();
+
+    }
+
+  }
+);
+
+renderer.domElement.addEventListener(
+  "contextmenu",
+  e=>{
+    e.preventDefault();
+  }
+);
+
+/* ============================================================
+   MOBILE BUTTONS
+   ============================================================ */
+
+jumpBtn.addEventListener(
+  "touchstart",
+  e=>{
+    mobileJump=true;
+    e.preventDefault();
+  },
+  {passive:false}
+);
+
+breakBtn.addEventListener(
+  "touchstart",
+  e=>{
+    breakTarget();
+    e.preventDefault();
+  },
+  {passive:false}
+);
+
+placeBtn.addEventListener(
+  "touchstart",
+  e=>{
+    placeTarget();
+    e.preventDefault();
+  },
+  {passive:false}
+);
+
+pauseBtn.addEventListener(
+  "touchstart",
+  e=>{
+    pauseGame();
+    e.preventDefault();
+  },
+  {passive:false}
+);
+
+/* ============================================================
+   KEYBOARD
+   ============================================================ */
+
+window.addEventListener(
+  "keydown",
+  e=>{
+
+    keys[e.code]=true;
+
+    if(
+      e.code==="Space" ||
+      e.code.startsWith("Arrow")
+    ){
+      e.preventDefault();
+    }
+
+    const number =
+      parseInt(e.key);
+
+    if(
+      number>=1 &&
+      number<=9
+    ){
+
+      selectedSlot=
+        number-1;
+
+      updateHotbar();
+
+    }
+
+    if(e.code==="KeyP"){
+      pauseGame();
+    }
+
+    if(e.code==="Escape"){
+      if(gameRunning){
+        pauseGame();
+      }
+    }
+
+  }
+);
+
+window.addEventListener(
+  "keyup",
+  e=>{
+    keys[e.code]=false;
+  }
+);
+
+/* ============================================================
+   PAUSE
+   ============================================================ */
+
+function pauseGame(){
+
+  if(!gameRunning) return;
+
+  gamePaused=true;
+
+  stopWalkSound();
+
+  pause.style.display="flex";
+
+  if(
+    document.pointerLockElement
+  ){
+    document.exitPointerLock();
+  }
+
+}
+
+function resumeGame(){
+
+  gamePaused=false;
+
+  pause.style.display="none";
+
+  if(!isTouchDevice()){
+
+    renderer.domElement.requestPointerLock();
+
+  }
+
+}
+
+resumeBtn.addEventListener(
+  "click",
+  resumeGame
+);
+
+saveBtn.addEventListener(
+  "click",
+  ()=>{
+    saveWorld();
+  }
+);
+
+homeBtn.addEventListener(
+  "click",
+  ()=>{
+
+    saveWorld();
+
+    gameRunning=false;
+    gamePaused=false;
+
+    pause.style.display="none";
+    hud.style.display="none";
+    home.style.display="flex";
+
+    stopWalkSound();
+
+    playHomeMusic();
+
+  }
+);
+
+/* ============================================================
+   SAVE / LOAD
+   ============================================================ */
 
 function saveWorld(){
 
-    const data={
-        seed:seed,
-        edits:[
-            ...edits.entries()
-        ],
-        player:{
-            x:player.x,
-            y:player.y,
-            z:player.z,
-            yaw:player.yaw,
-            pitch:player.pitch
-        }
-    };
+  const data={
 
-    try{
+    seed:worldSeed,
 
-        localStorage.setItem(
-            "RishantCraft_Save",
-            JSON.stringify(data)
-        );
+    edits:
+      [...edits.entries()],
 
-        toast(
-            "World saved ✓"
-        );
+    customDoors:
+      [...doorSpecs.values()]
+      .filter(d=>d.custom)
 
-    }catch(e){
+  };
 
-        toast(
-            "Save failed"
-        );
-    }
+  localStorage.setItem(
+    SAVE_KEY,
+    JSON.stringify(data)
+  );
+
 }
 
 function loadWorld(){
 
-    try{
+  try{
 
-        const raw=
-            localStorage.getItem(
-                "RishantCraft_Save"
-            );
+    const raw =
+      localStorage.getItem(
+        SAVE_KEY
+      );
 
-        if(!raw){
-            return false;
-        }
-
-        const data=
-            JSON.parse(raw);
-
-        seed=
-            data.seed||
-            seed;
-
-        edits.clear();
-
-        for(
-            const pair
-            of data.edits||[]
-        ){
-
-            edits.set(
-                pair[0],
-                pair[1]
-            );
-        }
-
-        if(data.player){
-
-            player.x=
-                data.player.x;
-
-            player.y=
-                data.player.y;
-
-            player.z=
-                data.player.z;
-
-            player.yaw=
-                data.player.yaw||0;
-
-            player.pitch=
-                data.player.pitch||0;
-        }
-
-        return true;
-
-    }catch(e){
-
-        return false;
+    if(!raw){
+      return;
     }
-}
 
+    const data =
+      JSON.parse(raw);
 
-/* =========================================================
-   NEW WORLD
-   ========================================================= */
-
-function createNewWorld(){
-
-    seed=
-        Math.floor(
-            Math.random()*1000000000
-        );
+    if(data.seed){
+      worldSeed=data.seed;
+    }
 
     edits.clear();
-    chunks.clear();
 
-    for(
-        const group
-        of chunkMeshes.values()
-    ){
+    if(Array.isArray(data.edits)){
 
-        scene.remove(group);
-    }
-
-    chunkMeshes.clear();
-
-    player.x=.5;
-    player.z=.5;
-
-    player.y=
-        terrain(0,0)+2;
-
-    player.velocityY=0;
-
-    player.yaw=0;
-    player.pitch=0;
-
-    toast(
-        "New world created"
-    );
-}
-
-
-/* =========================================================
-   GAME STATE
-   ========================================================= */
-
-let gameStarted=false;
-let paused=false;
-
-function startGame(newWorld=false){
-
-    document.getElementById(
-        "loading"
-    ).style.display="flex";
-
-    setupAudio();
-
-    if(newWorld){
-
-        createNewWorld();
-
-    }else{
-
-        if(!loadWorld()){
-
-            player.x=.5;
-            player.z=.5;
-
-            player.y=
-                terrain(0,0)+2;
+      data.edits.forEach(
+        item=>{
+          edits.set(
+            item[0],
+            item[1]
+          );
         }
+      );
+
     }
 
-    /*
-     * Generate first area.
-     */
-    loadChunksAroundPlayer();
-
-    /*
-     * Villager model.
-     */
-    loadVillagerModel();
-
-    document.getElementById(
-        "menu"
-    ).style.display="none";
-
-    document.getElementById(
-        "hud"
-    ).style.display="block";
-
-    document.getElementById(
-        "loading"
-    ).style.display="none";
-
-    gameStarted=true;
-    paused=false;
-
-    stopMenuMusic();
-
-    /*
-     * Browser audio gets user gesture
-     * from this button click.
-     */
-    setupAudio();
-
-    if(!mobile()){
-
-        canvas.requestPointerLock?.();
-    }
-
-    toast(
-        "Welcome to RishantCraft!"
-    );
-}
-
-
-/* =========================================================
-   PAUSE
-   ========================================================= */
-
-function togglePause(){
-
-    if(!gameStarted){
-        return;
-    }
-
-    paused=!paused;
-
-    document.getElementById(
-        "pause"
-    ).style.display=
-        paused
-        ?"flex"
-        :"none";
-
-    if(paused){
-
-        stopWalk();
-
-        if(
-            document.pointerLockElement
-        ){
-
-            document.exitPointerLock();
-        }
-
-    }else{
-
-        if(!mobile()){
-
-            canvas.requestPointerLock?.();
-        }
-    }
-}
-
-
-/* =========================================================
-   BUTTONS
-   ========================================================= */
-
-document.getElementById(
-    "play"
-).onclick=()=>{
-    startGame(false);
-};
-
-document.getElementById(
-    "newWorld"
-).onclick=()=>{
-    startGame(true);
-};
-
-document.getElementById(
-    "resume"
-).onclick=()=>{
-    togglePause();
-};
-
-document.getElementById(
-    "save"
-).onclick=()=>{
-    saveWorld();
-};
-
-document.getElementById(
-    "pauseBtn"
-).onclick=()=>{
-    togglePause();
-};
-
-document.getElementById(
-    "mobilePause"
-).onclick=()=>{
-    togglePause();
-};
-
-document.getElementById(
-    "home"
-).onclick=()=>{
-
-    saveWorld();
-
-    gameStarted=false;
-    paused=false;
-
-    stopWalk();
-    stopMenuMusic();
+    doorSpecs.clear();
 
     if(
-        document.pointerLockElement
+      Array.isArray(
+        data.customDoors
+      )
     ){
 
-        document.exitPointerLock();
+      data.customDoors.forEach(
+        door=>{
+          doorSpecs.set(
+            door.id,
+            door
+          );
+        }
+      );
+
     }
 
-    document.getElementById(
-        "pause"
-    ).style.display="none";
+  }catch(err){
 
-    document.getElementById(
-        "hud"
-    ).style.display="none";
-
-    document.getElementById(
-        "menu"
-    ).style.display="flex";
-
-    playMenuMusic();
-};
-
-
-/* =========================================================
-   MOBILE JOYSTICK
-   ========================================================= */
-
-const joystick=
-    document.getElementById(
-        "joystick"
+    console.warn(
+      "Save load error",
+      err
     );
 
-const stick=
-    document.getElementById(
-        "stick"
-    );
+  }
 
-let joyActive=false;
-
-joystick.addEventListener(
-    "touchstart",
-    e=>{
-
-        joyActive=true;
-
-        moveJoystick(
-            e.touches[0]
-        );
-
-    },
-    {passive:false}
-);
-
-joystick.addEventListener(
-    "touchmove",
-    e=>{
-
-        if(!joyActive) return;
-
-        moveJoystick(
-            e.touches[0]
-        );
-
-        e.preventDefault();
-
-    },
-    {passive:false}
-);
-
-joystick.addEventListener(
-    "touchend",
-    ()=>{
-
-        joyActive=false;
-
-        mobileForward=0;
-        mobileSide=0;
-
-        stick.style.left="33px";
-        stick.style.top="33px";
-    }
-);
-
-function moveJoystick(t){
-
-    const r=
-        joystick.getBoundingClientRect();
-
-    const cx=
-        r.left+r.width/2;
-
-    const cy=
-        r.top+r.height/2;
-
-    let dx=
-        t.clientX-cx;
-
-    let dy=
-        t.clientY-cy;
-
-    const max=45;
-
-    const length=
-        Math.hypot(dx,dy);
-
-    if(length>max){
-
-        dx=
-            dx/length*max;
-
-        dy=
-            dy/length*max;
-    }
-
-    stick.style.left=
-        33+dx+"px";
-
-    stick.style.top=
-        33+dy+"px";
-
-    mobileSide=
-        dx/max;
-
-    mobileForward=
-        -dy/max;
 }
 
+function newWorld(){
 
-/* =========================================================
-   MOBILE LOOK
-   ========================================================= */
-
-const look=
-    document.getElementById(
-        "look"
+  worldSeed =
+    Math.floor(
+      Math.random()*
+      4294967295
     );
 
-let lookData=null;
+  edits.clear();
 
-look.addEventListener(
-    "touchstart",
-    e=>{
+  doorSpecs.clear();
 
-        if(!e.touches.length){
-            return;
-        }
+  villageKeys.clear();
 
-        const t=e.touches[0];
+  villagerSpecs.clear();
 
-        lookData={
-            x:t.clientX,
-            y:t.clientY
-        };
-    },
-    {passive:true}
-);
-
-look.addEventListener(
-    "touchmove",
-    e=>{
-
-        if(!lookData){
-            return;
-        }
-
-        const t=e.touches[0];
-
-        const dx=
-            t.clientX-lookData.x;
-
-        const dy=
-            t.clientY-lookData.y;
-
-        player.yaw-=
-            dx*.006;
-
-        player.pitch-=
-            dy*.006;
-
-        player.pitch=
-            Math.max(
-                -1.52,
-                Math.min(
-                    1.52,
-                    player.pitch
-                )
-            );
-
-        lookData.x=t.clientX;
-        lookData.y=t.clientY;
-    },
-    {passive:true}
-);
-
-look.addEventListener(
-    "touchend",
-    ()=>{
-        lookData=null;
+  chunks.forEach(
+    chunk=>{
+      worldGroup.remove(
+        chunk.group
+      );
     }
-);
+  );
 
+  chunks.clear();
 
-/* =========================================================
-   MOBILE ACTIONS
-   ========================================================= */
+  doorObjects.forEach(
+    object=>{
+      object.removeFromParent();
+    }
+  );
 
-document.getElementById(
-    "jump"
-).addEventListener(
-    "touchstart",
-    e=>{
+  doorObjects.clear();
 
-        e.preventDefault();
+  villagers.forEach(
+    villager=>{
+      villager.sprite.removeFromParent();
+    }
+  );
 
-        if(player.onGround){
+  villagers=[];
 
-            player.velocityY=
-                8.3;
-        }
-    },
-    {passive:false}
-);
+  localStorage.removeItem(
+    SAVE_KEY
+  );
 
-document.getElementById(
-    "break"
-).addEventListener(
-    "touchstart",
-    e=>{
+  spawnPlayer();
 
-        e.preventDefault();
+  lastChunkX=999999;
+  lastChunkZ=999999;
 
-        breakBlock();
-    },
-    {passive:false}
-);
+  updateChunks();
 
-document.getElementById(
-    "place"
-).addEventListener(
-    "touchstart",
-    e=>{
+  saveWorld();
 
-        e.preventDefault();
-
-        const t=target();
-
-        if(
-            t &&
-            t.type==="door"
-        ){
-
-            toggleDoor(
-                t.object.userData.door
-            );
-
-        }else{
-
-            place();
-        }
-    },
-    {passive:false}
-);
-
-
-/* =========================================================
-   MOBILE CHECK
-   ========================================================= */
-
-function mobile(){
-
-    return(
-        /Android|iPhone|iPad|iPod/i.test(
-            navigator.userAgent
-        ) ||
-        innerWidth<800
-    );
 }
 
+/* ============================================================
+   SPAWN
+   ============================================================ */
 
-/* =========================================================
-   HUD
-   ========================================================= */
+function spawnPlayer(){
 
-let fpsFrames=0;
-let fpsTimer=0;
+  let sx=0;
+  let sz=0;
 
-function updateHUD(dt){
+  for(let r=0;r<50;r++){
 
-    fpsFrames++;
-    fpsTimer+=dt;
+    const h=
+      terrainHeight(
+        sx,
+        sz
+      );
 
-    if(fpsTimer>=1){
-
-        document.getElementById(
-            "fps"
-        ).textContent=
-            "FPS: "+
-            fpsFrames;
-
-        fpsFrames=0;
-        fpsTimer=0;
+    if(h>SEA_LEVEL+1){
+      break;
     }
 
-    document.getElementById(
-        "xyz"
-    ).textContent=
-        "XYZ: "+
-        Math.floor(player.x)+
-        " "+
-        Math.floor(player.y)+
-        " "+
-        Math.floor(player.z);
+    sx =
+      Math.floor(
+        Math.cos(r*1.7)*r
+      );
+
+    sz =
+      Math.floor(
+        Math.sin(r*1.7)*r
+      );
+
+  }
+
+  player.x=sx+.5;
+
+  player.z=sz+.5;
+
+  player.y=
+    terrainHeight(
+      sx,
+      sz
+    )+1.05;
+
+  player.velocityY=0;
+
+  player.onGround=true;
+
+  yaw=0;
+  pitch=0;
+
 }
 
+/* ============================================================
+   MOBILE / DESKTOP
+   ============================================================ */
 
-/* =========================================================
-   TOAST
-   ========================================================= */
+function isTouchDevice(){
 
-let toastTimer;
+  return (
+    "ontouchstart" in window ||
+    navigator.maxTouchPoints>0
+  );
 
-function toast(text){
-
-    const el=
-        document.getElementById(
-            "toast"
-        );
-
-    el.textContent=text;
-
-    el.classList.add(
-        "show"
-    );
-
-    clearTimeout(
-        toastTimer
-    );
-
-    toastTimer=
-        setTimeout(
-            ()=>{
-                el.classList.remove(
-                    "show"
-                );
-            },
-            1500
-        );
 }
 
+/* ============================================================
+   LANDSCAPE REQUEST
+   ============================================================ */
 
-/* =========================================================
-   RESIZE
-   ========================================================= */
+async function requestLandscape(){
+
+  try{
+
+    if(
+      document.documentElement.requestFullscreen
+    ){
+
+      await document.documentElement
+        .requestFullscreen()
+        .catch(()=>{});
+
+    }
+
+  }catch(e){}
+
+  try{
+
+    if(
+      screen.orientation &&
+      screen.orientation.lock
+    ){
+
+      await screen.orientation
+        .lock("landscape")
+        .catch(()=>{});
+
+    }
+
+  }catch(e){}
+
+}
+
+/* ============================================================
+   START GAME
+   ============================================================ */
+
+function startGame(){
+
+  playHomeMusic();
+
+  stopHomeMusic();
+
+  gameRunning=true;
+
+  gamePaused=false;
+
+  home.style.display="none";
+
+  hud.style.display="block";
+
+  spawnPlayer();
+
+  updateChunks();
+
+  updateCamera();
+
+  if(isTouchDevice()){
+
+    requestLandscape();
+
+  }else{
+
+    renderer.domElement.requestPointerLock();
+
+  }
+
+}
+
+/* ============================================================
+   START BUTTONS
+   ============================================================ */
+
+playBtn.addEventListener(
+  "click",
+  ()=>{
+
+    loadWorld();
+
+    startGame();
+
+  }
+);
+
+newWorldBtn.addEventListener(
+  "click",
+  ()=>{
+
+    newWorld();
+
+    startGame();
+
+  }
+);
+
+/* ============================================================
+   MOBILE ROTATION CHANGE
+   ============================================================ */
 
 window.addEventListener(
-    "resize",
-    ()=>{
+  "resize",
+  ()=>{
 
-        camera.aspect=
-            innerWidth/
-            innerHeight;
+    camera.aspect =
+      window.innerWidth/
+      window.innerHeight;
 
-        camera.updateProjectionMatrix();
+    camera.updateProjectionMatrix();
 
-        renderer.setSize(
-            innerWidth,
-            innerHeight
-        );
-    }
+    renderer.setSize(
+      window.innerWidth,
+      window.innerHeight
+    );
+
+  }
 );
 
+/* ============================================================
+   VILLAGER UPDATE
+   ============================================================ */
 
-/* =========================================================
-   GAME LOOP
-   ========================================================= */
+function updateVillagers(dt){
 
-let previous=
-    performance.now();
+  villagers.forEach(v=>{
 
-let chunkTimer=0;
+    const spec=v.spec;
+
+    spec.timer-=dt;
+
+    if(spec.timer<=0){
+
+      spec.timer=
+        2+
+        Math.random()*4;
+
+      const angle=
+        Math.random()*
+        Math.PI*2;
+
+      const distance=
+        1+
+        Math.random()*5;
+
+      spec.targetX=
+        spec.homeX+
+        Math.cos(angle)*distance;
+
+      spec.targetZ=
+        spec.homeZ+
+        Math.sin(angle)*distance;
+
+    }
+
+    const dx=
+      spec.targetX-spec.x;
+
+    const dz=
+      spec.targetZ-spec.z;
+
+    const dist=
+      Math.hypot(dx,dz);
+
+    if(dist>.15){
+
+      const speed=
+        .65*dt;
+
+      spec.x +=
+        dx/dist*speed;
+
+      spec.z +=
+        dz/dist*speed;
+
+      const h=
+        terrainHeight(
+          Math.floor(spec.x),
+          Math.floor(spec.z)
+        );
+
+      if(h>SEA_LEVEL){
+
+        spec.y=h+1;
+
+      }
+
+    }
+
+    v.sprite.position.set(
+      spec.x+.5,
+      spec.y+.8,
+      spec.z+.5
+    );
+
+  });
+
+}
+
+/* ============================================================
+   ANIMATION LOOP
+   ============================================================ */
 
 function animate(){
 
-    requestAnimationFrame(
-        animate
+  requestAnimationFrame(
+    animate
+  );
+
+  const dt =
+    Math.min(
+      clock.getDelta(),
+      .05
     );
 
-    const now=
-        performance.now();
+  if(
+    gameRunning &&
+    !gamePaused
+  ){
 
-    let dt=
-        (now-previous)/1000;
+    movePlayer(dt);
 
-    previous=now;
+    updateCamera();
 
-    dt=
-        Math.min(
-            dt,
-            .05
-        );
+    updateChunks();
 
-    if(
-        gameStarted &&
-        !paused
-    ){
+    updateBreaking(dt);
 
-        updatePlayer(dt);
+    updateDoors(dt);
 
-        updateDoors(dt);
+    updateVillagers(dt);
 
-        updateVillagers(dt);
+    updateTargetUI();
 
-        updateHUD(dt);
+    /* water animation */
 
-        chunkTimer+=dt;
+    if(textures.water){
 
-        /*
-         * Don't rebuild chunks every frame.
-         */
-        if(chunkTimer>1){
+      textures.water.offset.x +=
+        dt*.008;
 
-            loadChunksAroundPlayer();
+      textures.water.offset.y +=
+        dt*.003;
 
-            chunkTimer=0;
-        }
     }
 
-    renderer.render(
-        scene,
-        camera
-    );
+  }
+
+  renderer.render(
+    scene,
+    camera
+  );
+
 }
 
+/* ============================================================
+   AUDIO UNLOCK
+   ============================================================ */
 
-/* =========================================================
-   INITIAL
-   ========================================================= */
-
-updateHotbar();
-
-setupAudio();
-
-/*
- * Menu music can only start after
- * browser user interaction.
- */
 document.addEventListener(
-    "click",
-    ()=>{
-        if(!gameStarted){
-            playMenuMusic();
-        }
-    },
-    {passive:true}
+  "pointerdown",
+  ()=>{
+
+    if(
+      !gameRunning &&
+      home.style.display!=="none"
+    ){
+
+      playHomeMusic();
+
+    }
+
+  },
+  {once:false}
 );
 
-animate();
+/* ============================================================
+   INITIALIZE
+   ============================================================ */
 
+async function init(){
+
+  loading.style.display="flex";
+
+  await loadAllTextures();
+
+  createHotbar();
+
+  loadWorld();
+
+  spawnPlayer();
+
+  updateChunks();
+
+  updateCamera();
+
+  loading.style.display="none";
+
+  home.style.display="flex";
+
+  playHomeMusic();
+
+  animate();
+
+}
+
+init();
+
+})();
 </script>
 
 </body>
